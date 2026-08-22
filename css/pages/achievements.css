@@ -609,14 +609,171 @@
    SUMMARY — RESPONSIVE
 ========================================================= */
 
+/* =========================================================
+   ACHIEVEMENTS — RESPONSIVE
+========================================================= */
+
 @media (max-width: 800px) {
-  .achievement-summary {
-    grid-template-columns: repeat(2, 1fr);
 
-    gap: 18px 20px;
-  }
+    /* Summary */
 
-  .summary-divider {
-    display: none;
-  }
+    .achievement-summary {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 18px 20px;
+    }
+
+    .summary-divider {
+        display: none;
+    }
+
+
+    /* Achievement grid */
+
+    .achievement-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Header */
+
+    .achievements-header {
+        padding: 24px;
+
+        min-height: 170px;
+    }
+
+
+    .achievements-header-avatar {
+        right: 8px;
+        bottom: -12px;
+
+        width: 145px;
+        height: 145px;
+
+        opacity: 0.85;
+    }
+
+
+    .achievements-title-text {
+        max-width: 60%;
+    }
+
+
+    .achievements-title-text h1 {
+        font-size: 2rem;
+    }
+
+
+    .achievements-title-text p {
+        font-size: 0.78rem;
+    }
+
+
+    /* Collection header */
+
+    .achievement-section-header {
+        align-items: flex-start;
+    }
+
+}
+@media (max-width: 520px) {
+
+    .achievements-page {
+        padding: 24px 14px 110px;
+    }
+
+
+    .achievements-header {
+        padding: 22px;
+
+        min-height: 155px;
+    }
+
+
+    .achievements-title-icon {
+        width: 50px;
+        height: 50px;
+
+        border-radius: 16px;
+    }
+
+
+    .achievements-title-icon .material-symbols-rounded {
+        font-size: 27px;
+    }
+
+
+    .achievements-title-text {
+        max-width: 100%;
+    }
+
+
+    .achievements-title-text h1 {
+        font-size: 1.7rem;
+    }
+
+
+    .achievements-title-text p {
+        max-width: 240px;
+
+        font-size: 0.72rem;
+    }
+
+
+    .achievements-header-avatar {
+        display: none;
+    }
+
+
+    .achievement-summary {
+        padding: 18px;
+    }
+
+
+    .achievement-summary-item {
+        gap: 9px;
+    }
+
+
+    .summary-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .summary-icon .material-symbols-rounded {
+        font-size: 22px;
+    }
+
+
+    .summary-info strong {
+        font-size: 1.05rem;
+    }
+
+
+    .summary-info span {
+        font-size: 0.65rem;
+    }
+
+
+    .achievement-section-header h2 {
+        font-size: 1.15rem;
+    }
+
+
+    .achievement-section-header p {
+        font-size: 0.72rem;
+    }
+
+
+    .achievement-progress span {
+        font-size: 0.85rem;
+    }
+
+
+    .achievement-card {
+        padding: 18px;
+    }
+
 }
