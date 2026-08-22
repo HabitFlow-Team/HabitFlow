@@ -1,55 +1,66 @@
 /* =========================================================
    HABITFLOW — ACHIEVEMENTS
-   Achievement category filtering
+   Achievement evaluation
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    const filters = document.querySelectorAll(".achievement-filter");
-    const cards = document.querySelectorAll(".achievement-card");
+/**
+ * =========================================================
+ * ACHIEVEMENT UNLOCK CHECK
+ * =========================================================
+ *
+ * Determines whether a single achievement has been unlocked
+ * based on the user's current habit data.
+ *
+ * @param {Object} achievement
+ * @param {Array} habits
+ * @returns {boolean}
+ */
+function isAchievementUnlocked(achievement, habits = []) {
 
-    if (!filters.length || !cards.length) return;
-
-
-    filters.forEach((filter) => {
-
-        filter.addEventListener("click", () => {
-
-            const selectedCategory =
-                filter.dataset.category;
-
-
-            /* ---------------------------------------------
-               Update active filter
-            --------------------------------------------- */
-
-            filters.forEach((item) => {
-                item.classList.remove("active");
-            });
-
-            filter.classList.add("active");
+    if (!achievement) return false;
 
 
-            /* ---------------------------------------------
-               Filter achievement cards
-            --------------------------------------------- */
+    switch (achievement.type) {
 
-            cards.forEach((card) => {
+        /* -------------------------------------------------
+           STREAK ACHIEVEMENTS
+        ------------------------------------------------- */
 
-                const cardCategory =
-                    card.dataset.category;
+        case "streak":
+            return (
+                getBestStreak(habits) >=
+                achievement.requirement
+            );
 
-                const shouldShow =
-                    selectedCategory === "all" ||
-                    cardCategory === selectedCategory;
 
-                card.style.display =
-                    shouldShow ? "" : "none";
+        /* -------------------------------------------------
+           TOTAL COMPLETION ACHIEVEMENTS
+        ------------------------------------------------- */
 
-            });
+        case "total-completions":
+            return (
+                getTotalCompletions(habits) >=
+                achievement.requirement
+            );
 
-        });
 
-    });
+        /* -------------------------------------------------
+           HABIT COUNT ACHIEVEMENTS
+        ------------------------------------------------- */
 
-});
+        case "habit-count":
+            return (
+                getTotalHabits(habits) >=
+                achievement.requirement
+            );
+
+
+        /* -------------------------------------------------
+           UNKNOWN TYPE
+        ------------------------------------------------- */
+
+        default:
+            return false;
+    }
+}
