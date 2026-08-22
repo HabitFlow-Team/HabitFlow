@@ -3,7 +3,6 @@
    Achievement evaluation
 ========================================================= */
 
-
 /**
  * =========================================================
  * ACHIEVEMENT UNLOCK CHECK
@@ -17,52 +16,37 @@
  * @returns {boolean}
  */
 function isAchievementUnlocked(achievement, habits = []) {
+  if (!achievement) return false;
 
-    if (!achievement) return false;
-
-
-    switch (achievement.type) {
-
-        /* -------------------------------------------------
+  switch (achievement.type) {
+    /* -------------------------------------------------
            STREAK ACHIEVEMENTS
         ------------------------------------------------- */
 
-        case "streak":
-            return (
-                getBestStreak(habits) >=
-                achievement.requirement
-            );
+    case "streak":
+      return getBestStreak(habits) >= achievement.requirement;
 
-
-        /* -------------------------------------------------
+    /* -------------------------------------------------
            TOTAL COMPLETION ACHIEVEMENTS
         ------------------------------------------------- */
 
-        case "total-completions":
-            return (
-                getTotalCompletions(habits) >=
-                achievement.requirement
-            );
+    case "total-completions":
+      return getTotalCompletions(habits) >= achievement.requirement;
 
-
-        /* -------------------------------------------------
+    /* -------------------------------------------------
            HABIT COUNT ACHIEVEMENTS
         ------------------------------------------------- */
 
-        case "habit-count":
-            return (
-                getTotalHabits(habits) >=
-                achievement.requirement
-            );
+    case "habit-count":
+      return getTotalHabits(habits) >= achievement.requirement;
 
-
-        /* -------------------------------------------------
+    /* -------------------------------------------------
            UNKNOWN TYPE
         ------------------------------------------------- */
 
-        default:
-            return false;
-    }
+    default:
+      return false;
+  }
 }
 
 /**
@@ -77,93 +61,128 @@ function isAchievementUnlocked(achievement, habits = []) {
  * @returns {string}
  */
 function createAchievementCard(achievement, habits = []) {
+  const unlocked = isAchievementUnlocked(achievement, habits);
 
-    const unlocked =
-        isAchievementUnlocked(achievement, habits);
+  const cardState = unlocked ? "achievement-unlocked" : "achievement-locked";
 
-    const cardState = unlocked
-        ? "achievement-unlocked"
-        : "achievement-locked";
+  const statusText = unlocked ? "UNLOCKED" : "LOCKED";
 
-    const statusText = unlocked
-        ? "UNLOCKED"
-        : "LOCKED";
+  const statusClass = unlocked
+    ? "achievement-status-unlocked"
+    : "achievement-status-locked";
 
-    const statusClass = unlocked
-        ? "achievement-status-unlocked"
-        : "achievement-status-locked";
+  return `
+    <article
+      class="achievement-card ${cardState}"
+      data-category="${achievement.category}"
+      data-achievement-id="${achievement.id}"
+    >
 
+      <!-- Achievement header -->
 
-    return `
-        <article
-            class="achievement-card ${cardState}"
-            data-category="${achievement.category}"
-            data-achievement-id="${achievement.id}"
-        >
+      <div class="achievement-card-top">
 
-            <!-- Achievement icon -->
+        <div class="achievement-badge">
+          <span class="material-symbols-rounded">
+            ${achievement.icon}
+          </span>
+        </div>
 
-            <div class="achievement-badge">
+        <span class="achievement-points">
+          +${achievement.points}
+        </span>
 
-                <span class="material-symbols-rounded">
-                    ${achievement.icon}
-                </span>
-
-            </div>
-
-
-            <!-- Achievement content -->
-
-            <div class="achievement-card-content">
-
-                <div class="achievement-card-top">
-
-                    <h3>
-                        ${achievement.name}
-                    </h3>
-
-                    <span class="achievement-points">
-                        +${achievement.points}
-                    </span>
-
-                </div>
+      </div>
 
 
-                <p class="achievement-description">
-                    ${achievement.description}
-                </p>
+      <!-- Achievement content -->
+
+      <div class="achievement-card-content">
+
+        <h3>
+          ${achievement.name}
+        </h3>
+
+        <p>
+          ${achievement.description}
+        </p>
+
+      </div>
 
 
-                <!-- Requirement -->
+      <!-- Achievement requirement -->
 
-                <div class="achievement-card-requirement">
+      <div class="achievement-card-requirement">
 
-                    <span class="material-symbols-rounded">
-                        ${unlocked ? "check_circle" : "lock"}
-                    </span>
+        <span class="material-symbols-rounded">
+          ${unlocked ? "check_circle" : "lock"}
+        </span>
 
-                    <span>
-                        ${achievement.requirement}
-                        ${achievement.type === "streak"
-                            ? " day streak"
-                            : achievement.type === "total-completions"
-                                ? " completions"
-                                : achievement.type === "habit-count"
-                                    ? " habits"
-                                    : ""}
-                    </span>
+        <span>
+          ${
+            achievement.type === "streak"
+              ? `Reach a ${achievement.requirement}-day streak`
+              : achievement.type === "total-completions"
+                ? `Complete ${achievement.requirement} habits`
+                : achievement.type === "habit-count"
+                  ? `Create ${achievement.requirement} habits`
+                  : ""
+          }
+        </span>
 
+        <span class="achievement-status ${statusClass}">
+          ${statusText}
+        </span>
 
-                    <!-- Status -->
+      </div>
 
-                    <span class="achievement-status ${statusClass}">
-                        ${statusText}
-                    </span>
-
-                </div>
-
-            </div>
-
-        </article>
-    `;
+    </article>
+  `;
 }
+
+/**
+ * =========================================================
+ * RENDER ACHIEVEMENTS
+ * =========================================================
+ *
+ * Generates all achievement cards from ACHIEVEMENTS.
+ */
+function renderAchievements() {
+
+    const grid = document.getElementById("achievement-grid");
+
+    if (!grid) return;
+
+
+    /* ---------------------------------------------
+       Load user's habits
+    --------------------------------------------- */
+
+    const habits =
+        typeof loadUserHabits === "function"
+            ? loadUserHabits()
+            : [];
+
+
+    /* ---------------------------------------------
+       Generate achievement cards
+    --------------------------------------------- */
+
+    grid.innerHTML = ACHIEVEMENTS
+        .map((achievement) =>
+            createAchievementCard(achievement, habits)
+        )
+        .join("");
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    renderAchievements();
+
+});
