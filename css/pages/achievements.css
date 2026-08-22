@@ -355,6 +355,173 @@
 }
 
 /* =========================================================
+   ACHIEVEMENT GRID
+========================================================= */
+
+.achievement-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-top: 18px;
+}
+
+
+/* =========================================================
+   ACHIEVEMENT CARD
+========================================================= */
+
+.achievement-card {
+    position: relative;
+
+    padding: 20px;
+
+    border-radius: var(--radius-xl);
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border-glass);
+
+    box-shadow: var(--shadow-soft);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.achievement-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow: var(--shadow-ui);
+}
+
+
+/* =========================================================
+   CARD TOP
+========================================================= */
+
+.achievement-card-top {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   ACHIEVEMENT BADGE
+========================================================= */
+
+.achievement-badge {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 18px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(243, 182, 218, 0.55),
+        rgba(199, 184, 255, 0.6)
+    );
+
+    color: var(--clr-secondary-deep);
+
+    box-shadow: var(--shadow-soft);
+}
+
+
+.achievement-badge .material-symbols-rounded {
+    font-size: 30px;
+}
+
+
+/* =========================================================
+   POINTS
+========================================================= */
+
+.achievement-points {
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: rgba(123, 104, 255, 0.12);
+
+    color: var(--clr-secondary-deep);
+
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.achievement-card-content {
+    margin-top: 18px;
+}
+
+
+.achievement-card-content h3 {
+    color: var(--clr-text-heading);
+
+    font-family: var(--font-heading);
+
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+
+.achievement-card-content p {
+    margin-top: 6px;
+
+    color: var(--clr-text-soft);
+
+    font-size: 0.78rem;
+    font-weight: 500;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   REQUIREMENT
+========================================================= */
+
+.achievement-card-requirement {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 18px;
+    padding-top: 13px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+
+    color: var(--clr-text-dark);
+
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+
+.achievement-card-requirement .material-symbols-rounded {
+    font-size: 18px;
+
+    color: var(--cat-health);
+}
+
+/* =========================================================
    SUMMARY — RESPONSIVE
 ========================================================= */
 
