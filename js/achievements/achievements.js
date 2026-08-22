@@ -142,6 +142,68 @@ function createAchievementCard(achievement, habits = []) {
 
 /**
  * =========================================================
+ * UPDATE ACHIEVEMENT SUMMARY
+ * =========================================================
+ *
+ * Calculates and displays the user's achievement statistics.
+ *
+ * @param {Array} achievements
+ * @param {Array} habits
+ */
+function updateAchievementSummary(achievements, habits = []) {
+
+    const unlockedCount = achievements.filter(
+        (achievement) => isAchievementUnlocked(achievement, habits)
+    ).length;
+
+    const lockedCount = achievements.length - unlockedCount;
+
+    const totalPoints = achievements
+        .filter((achievement) => isAchievementUnlocked(achievement, habits))
+        .reduce(
+            (total, achievement) => total + achievement.points,
+            0
+        );
+
+    const bestStreak = getBestStreak(habits);
+
+
+    /* ---------------------------------------------
+       Update summary UI
+    --------------------------------------------- */
+
+    const unlockedElement =
+        document.getElementById("summary-unlocked");
+
+    const lockedElement =
+        document.getElementById("summary-locked");
+
+    const pointsElement =
+        document.getElementById("summary-points");
+
+    const bestStreakElement =
+        document.getElementById("summary-best-streak");
+
+
+    if (unlockedElement) {
+        unlockedElement.textContent = unlockedCount;
+    }
+
+    if (lockedElement) {
+        lockedElement.textContent = lockedCount;
+    }
+
+    if (pointsElement) {
+        pointsElement.textContent = totalPoints;
+    }
+
+    if (bestStreakElement) {
+        bestStreakElement.textContent = bestStreak;
+    }
+}
+
+/**
+ * =========================================================
  * RENDER ACHIEVEMENTS
  * =========================================================
  *
@@ -173,6 +235,7 @@ function renderAchievements() {
             createAchievementCard(achievement, habits)
         )
         .join("");
+    updateAchievementSummary(ACHIEVEMENTS, habits);
 
 }
 
