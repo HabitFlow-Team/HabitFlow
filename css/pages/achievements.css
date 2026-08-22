@@ -545,6 +545,66 @@
 .achievement-locked .achievement-card-requirement .material-symbols-rounded {
   color: var(--clr-text-soft);
 }
+
+/* =========================================================
+   UNLOCKED ACHIEVEMENT
+========================================================= */
+
+.achievement-unlocked {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.34),
+            rgba(243, 182, 218, 0.12),
+            rgba(199, 184, 255, 0.16)
+        );
+
+    box-shadow:
+        var(--shadow-soft),
+        0 0 28px rgba(243, 182, 218, 0.12);
+}
+
+
+/* =========================================================
+   UNLOCKED BADGE
+========================================================= */
+
+.achievement-unlocked .achievement-badge {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(243, 182, 218, 0.7),
+            rgba(199, 184, 255, 0.75),
+            rgba(215, 232, 255, 0.7)
+        );
+
+    color: var(--clr-secondary-deep);
+
+    box-shadow:
+        0 8px 20px rgba(142, 123, 255, 0.16);
+}
+
+
+/* =========================================================
+   UNLOCKED STATUS
+========================================================= */
+
+.achievement-status {
+    margin-left: auto;
+
+    padding: 5px 8px;
+
+    border-radius: 999px;
+
+    background: rgba(52, 211, 153, 0.12);
+
+    color: var(--cat-health);
+
+    font-size: 0.58rem;
+    font-weight: 800;
+
+    letter-spacing: 0.06em;
+}
 /* =========================================================
    SUMMARY — RESPONSIVE
 ========================================================= */
