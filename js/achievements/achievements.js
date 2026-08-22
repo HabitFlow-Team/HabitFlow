@@ -239,6 +239,64 @@ function renderAchievements() {
 
 }
 
+/**
+ * =========================================================
+ * ACHIEVEMENT FILTERS
+ * =========================================================
+ *
+ * Filters dynamically generated achievement cards
+ * based on their category.
+ */
+function setupAchievementFilters() {
+
+    const filterButtons =
+        document.querySelectorAll(".achievement-filter");
+
+    const cards =
+        document.querySelectorAll(".achievement-card");
+
+
+    filterButtons.forEach((button) => {
+
+        button.addEventListener("click", () => {
+
+            const selectedCategory =
+                button.dataset.category;
+
+
+            /* ---------------------------------------------
+               Update active filter
+            --------------------------------------------- */
+
+            filterButtons.forEach((filterButton) => {
+                filterButton.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+
+            /* ---------------------------------------------
+               Filter achievement cards
+            --------------------------------------------- */
+
+            cards.forEach((card) => {
+
+                const cardCategory =
+                    card.dataset.category;
+
+                const shouldShow =
+                    selectedCategory === "all" ||
+                    cardCategory === selectedCategory;
+
+                card.style.display =
+                    shouldShow ? "" : "none";
+            });
+
+        });
+
+    });
+
+}
 
 /* =========================================================
    INITIALIZE
@@ -247,5 +305,6 @@ function renderAchievements() {
 document.addEventListener("DOMContentLoaded", () => {
 
     renderAchievements();
+    setupAchievementFilters();
 
 });
