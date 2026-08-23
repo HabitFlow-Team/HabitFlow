@@ -48,7 +48,50 @@ function isAchievementUnlocked(achievement, habits = []) {
       return false;
   }
 }
+/**
+ * =========================================================
+ * ACHIEVEMENT PROGRESS
+ * =========================================================
+ *
+ * Returns the user's current progress toward an achievement.
+ *
+ * @param {Object} achievement
+ * @param {Array} habits
+ * @returns {number}
+ */
+function getAchievementProgress(achievement, habits = []) {
+  if (!achievement) return 0;
 
+  switch (achievement.type) {
+    /* -------------------------------------------------
+           STREAK ACHIEVEMENTS
+        ------------------------------------------------- */
+
+    case "streak":
+      return getBestStreak(habits);
+
+    /* -------------------------------------------------
+           TOTAL COMPLETION ACHIEVEMENTS
+        ------------------------------------------------- */
+
+    case "total-completions":
+      return getTotalCompletions(habits);
+
+    /* -------------------------------------------------
+           HABIT COUNT ACHIEVEMENTS
+        ------------------------------------------------- */
+
+    case "habit-count":
+      return getTotalHabits(habits);
+
+    /* -------------------------------------------------
+           UNKNOWN TYPE
+        ------------------------------------------------- */
+
+    default:
+      return 0;
+  }
+}
 /**
  * =========================================================
  * ACHIEVEMENT CARD RENDERER
@@ -151,55 +194,45 @@ function createAchievementCard(achievement, habits = []) {
  * @param {Array} habits
  */
 function updateAchievementSummary(achievements, habits = []) {
+  const unlockedCount = achievements.filter((achievement) =>
+    isAchievementUnlocked(achievement, habits),
+  ).length;
 
-    const unlockedCount = achievements.filter(
-        (achievement) => isAchievementUnlocked(achievement, habits)
-    ).length;
+  const lockedCount = achievements.length - unlockedCount;
 
-    const lockedCount = achievements.length - unlockedCount;
+  const totalPoints = achievements
+    .filter((achievement) => isAchievementUnlocked(achievement, habits))
+    .reduce((total, achievement) => total + achievement.points, 0);
 
-    const totalPoints = achievements
-        .filter((achievement) => isAchievementUnlocked(achievement, habits))
-        .reduce(
-            (total, achievement) => total + achievement.points,
-            0
-        );
+  const bestStreak = getBestStreak(habits);
 
-    const bestStreak = getBestStreak(habits);
-
-
-    /* ---------------------------------------------
+  /* ---------------------------------------------
        Update summary UI
     --------------------------------------------- */
 
-    const unlockedElement =
-        document.getElementById("summary-unlocked");
+  const unlockedElement = document.getElementById("summary-unlocked");
 
-    const lockedElement =
-        document.getElementById("summary-locked");
+  const lockedElement = document.getElementById("summary-locked");
 
-    const pointsElement =
-        document.getElementById("summary-points");
+  const pointsElement = document.getElementById("summary-points");
 
-    const bestStreakElement =
-        document.getElementById("summary-best-streak");
+  const bestStreakElement = document.getElementById("summary-best-streak");
 
+  if (unlockedElement) {
+    unlockedElement.textContent = unlockedCount;
+  }
 
-    if (unlockedElement) {
-        unlockedElement.textContent = unlockedCount;
-    }
+  if (lockedElement) {
+    lockedElement.textContent = lockedCount;
+  }
 
-    if (lockedElement) {
-        lockedElement.textContent = lockedCount;
-    }
+  if (pointsElement) {
+    pointsElement.textContent = totalPoints;
+  }
 
-    if (pointsElement) {
-        pointsElement.textContent = totalPoints;
-    }
-
-    if (bestStreakElement) {
-        bestStreakElement.textContent = bestStreak;
-    }
+  if (bestStreakElement) {
+    bestStreakElement.textContent = bestStreak;
+  }
 }
 
 /**
@@ -210,33 +243,24 @@ function updateAchievementSummary(achievements, habits = []) {
  * Generates all achievement cards from ACHIEVEMENTS.
  */
 function renderAchievements() {
+  const grid = document.getElementById("achievement-grid");
 
-    const grid = document.getElementById("achievement-grid");
+  if (!grid) return;
 
-    if (!grid) return;
-
-
-    /* ---------------------------------------------
+  /* ---------------------------------------------
        Load user's habits
     --------------------------------------------- */
 
-    const habits =
-        typeof loadUserHabits === "function"
-            ? loadUserHabits()
-            : [];
+  const habits = typeof loadUserHabits === "function" ? loadUserHabits() : [];
 
-
-    /* ---------------------------------------------
+  /* ---------------------------------------------
        Generate achievement cards
     --------------------------------------------- */
 
-    grid.innerHTML = ACHIEVEMENTS
-        .map((achievement) =>
-            createAchievementCard(achievement, habits)
-        )
-        .join("");
-    updateAchievementSummary(ACHIEVEMENTS, habits);
-
+  grid.innerHTML = ACHIEVEMENTS.map((achievement) =>
+    createAchievementCard(achievement, habits),
+  ).join("");
+  updateAchievementSummary(ACHIEVEMENTS, habits);
 }
 
 /**
@@ -248,54 +272,38 @@ function renderAchievements() {
  * based on their category.
  */
 function setupAchievementFilters() {
+  const filterButtons = document.querySelectorAll(".achievement-filter");
 
-    const filterButtons =
-        document.querySelectorAll(".achievement-filter");
+  const cards = document.querySelectorAll(".achievement-card");
 
-    const cards =
-        document.querySelectorAll(".achievement-card");
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const selectedCategory = button.dataset.category;
 
-
-    filterButtons.forEach((button) => {
-
-        button.addEventListener("click", () => {
-
-            const selectedCategory =
-                button.dataset.category;
-
-
-            /* ---------------------------------------------
+      /* ---------------------------------------------
                Update active filter
             --------------------------------------------- */
 
-            filterButtons.forEach((filterButton) => {
-                filterButton.classList.remove("active");
-            });
+      filterButtons.forEach((filterButton) => {
+        filterButton.classList.remove("active");
+      });
 
-            button.classList.add("active");
+      button.classList.add("active");
 
-
-            /* ---------------------------------------------
+      /* ---------------------------------------------
                Filter achievement cards
             --------------------------------------------- */
 
-            cards.forEach((card) => {
+      cards.forEach((card) => {
+        const cardCategory = card.dataset.category;
 
-                const cardCategory =
-                    card.dataset.category;
+        const shouldShow =
+          selectedCategory === "all" || cardCategory === selectedCategory;
 
-                const shouldShow =
-                    selectedCategory === "all" ||
-                    cardCategory === selectedCategory;
-
-                card.style.display =
-                    shouldShow ? "" : "none";
-            });
-
-        });
-
+        card.style.display = shouldShow ? "" : "none";
+      });
     });
-
+  });
 }
 
 /* =========================================================
@@ -303,8 +311,6 @@ function setupAchievementFilters() {
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    renderAchievements();
-    setupAchievementFilters();
-
+  renderAchievements();
+  setupAchievementFilters();
 });
