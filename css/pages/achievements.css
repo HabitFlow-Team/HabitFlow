@@ -507,46 +507,46 @@
 ========================================================= */
 
 .achievement-card-progress {
-    margin-top: 16px;
+  margin-top: 16px;
 }
 
 .achievement-progress-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    margin-bottom: 7px;
+  margin-bottom: 7px;
 
-    color: var(--clr-text-soft);
+  color: var(--clr-text-soft);
 
-    font-size: 0.68rem;
-    font-weight: 700;
+  font-size: 0.68rem;
+  font-weight: 700;
 }
 
 .achievement-progress-label span:last-child {
-    color: var(--clr-secondary-deep);
-    font-weight: 800;
+  color: var(--clr-secondary-deep);
+  font-weight: 800;
 }
 
 .achievement-progress-bar {
-    width: 100%;
-    height: 7px;
+  width: 100%;
+  height: 7px;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    border-radius: 999px;
+  border-radius: 999px;
 
-    background: rgba(123, 104, 255, 0.10);
+  background: rgba(123, 104, 255, 0.1);
 }
 
 .achievement-progress-fill {
-    height: 100%;
+  height: 100%;
 
-    border-radius: inherit;
+  border-radius: inherit;
 
-    background: var(--grad-btn);
+  background: var(--grad-btn);
 
-    transition: width 0.4s ease;
+  transition: width 0.4s ease;
 }
 /* =========================================================
    LOCKED ACHIEVEMENT
@@ -597,59 +597,54 @@
 ========================================================= */
 
 .achievement-unlocked {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.34),
-            rgba(243, 182, 218, 0.12),
-            rgba(199, 184, 255, 0.16)
-        );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.34),
+    rgba(243, 182, 218, 0.12),
+    rgba(199, 184, 255, 0.16)
+  );
 
-    box-shadow:
-        var(--shadow-soft),
-        0 0 28px rgba(243, 182, 218, 0.12);
+  box-shadow:
+    var(--shadow-soft),
+    0 0 28px rgba(243, 182, 218, 0.12);
 }
-
 
 /* =========================================================
    UNLOCKED BADGE
 ========================================================= */
 
 .achievement-unlocked .achievement-badge {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(243, 182, 218, 0.7),
-            rgba(199, 184, 255, 0.75),
-            rgba(215, 232, 255, 0.7)
-        );
+  background: linear-gradient(
+    135deg,
+    rgba(243, 182, 218, 0.7),
+    rgba(199, 184, 255, 0.75),
+    rgba(215, 232, 255, 0.7)
+  );
 
-    color: var(--clr-secondary-deep);
+  color: var(--clr-secondary-deep);
 
-    box-shadow:
-        0 8px 20px rgba(142, 123, 255, 0.16);
+  box-shadow: 0 8px 20px rgba(142, 123, 255, 0.16);
 }
-
 
 /* =========================================================
    UNLOCKED STATUS
 ========================================================= */
 
 .achievement-status {
-    margin-left: auto;
+  margin-left: auto;
 
-    padding: 5px 8px;
+  padding: 5px 8px;
 
-    border-radius: 999px;
+  border-radius: 999px;
 
-    background: rgba(52, 211, 153, 0.12);
+  background: rgba(52, 211, 153, 0.12);
 
-    color: var(--cat-health);
+  color: var(--cat-health);
 
-    font-size: 0.58rem;
-    font-weight: 800;
+  font-size: 0.58rem;
+  font-weight: 800;
 
-    letter-spacing: 0.06em;
+  letter-spacing: 0.06em;
 }
 
 /* =========================================================
@@ -657,86 +652,82 @@
 ========================================================= */
 
 .achievement-filters {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    gap: 8px;
+  gap: 8px;
 
-    margin-top: 18px;
+  margin-top: 18px;
 
-    overflow-x: auto;
+  overflow-x: auto;
 
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
 
 .achievement-filters::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-
 
 /* =========================================================
    FILTER BUTTON
 ========================================================= */
 
 .achievement-filter {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    gap: 6px;
+  gap: 6px;
 
-    flex-shrink: 0;
+  flex-shrink: 0;
 
-    padding: 8px 13px;
+  padding: 8px 13px;
 
-    border-radius: 999px;
+  border-radius: 999px;
 
-    background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.22);
 
-    border: 1px solid var(--border-glass);
+  border: 1px solid var(--border-glass);
 
-    color: var(--clr-text-soft);
+  color: var(--clr-text-soft);
 
-    font-size: 0.72rem;
-    font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 700;
 
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
-
 
 .achievement-filter .material-symbols-rounded {
-    font-size: 17px;
+  font-size: 17px;
 }
-
 
 /* =========================================================
    HOVER
 ========================================================= */
 
 .achievement-filter:hover {
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 
-    background: var(--bg-card-strong);
+  background: var(--bg-card-strong);
 
-    color: var(--clr-text-heading);
+  color: var(--clr-text-heading);
 }
-
 
 /* =========================================================
    ACTIVE FILTER
 ========================================================= */
 
 .achievement-filter.active {
-    background: var(--grad-btn);
+  background: var(--grad-btn);
 
-    border-color: transparent;
+  border-color: transparent;
 
-    color: var(--clr-text-white);
+  color: var(--clr-text-white);
 
-    box-shadow: var(--shadow-btn);
+  box-shadow: var(--shadow-btn);
 }
 /* =========================================================
    SUMMARY — RESPONSIVE
@@ -747,166 +738,138 @@
 ========================================================= */
 
 @media (max-width: 800px) {
+  /* Summary */
 
-    /* Summary */
+  .achievement-summary {
+    grid-template-columns: repeat(2, 1fr);
 
-    .achievement-summary {
-        grid-template-columns: repeat(2, 1fr);
+    gap: 18px 20px;
+  }
 
-        gap: 18px 20px;
-    }
+  .summary-divider {
+    display: none;
+  }
 
-    .summary-divider {
-        display: none;
-    }
+  /* Achievement grid */
 
+  .achievement-grid {
+    grid-template-columns: 1fr;
+  }
 
-    /* Achievement grid */
+  /* Header */
 
-    .achievement-grid {
-        grid-template-columns: 1fr;
-    }
+  .achievements-header {
+    padding: 24px;
 
+    min-height: 170px;
+  }
 
-    /* Header */
+  .achievements-header-avatar {
+    right: 8px;
+    bottom: -12px;
 
-    .achievements-header {
-        padding: 24px;
+    width: 145px;
+    height: 145px;
 
-        min-height: 170px;
-    }
+    opacity: 0.85;
+  }
 
+  .achievements-title-text {
+    max-width: 60%;
+  }
 
-    .achievements-header-avatar {
-        right: 8px;
-        bottom: -12px;
+  .achievements-title-text h1 {
+    font-size: 2rem;
+  }
 
-        width: 145px;
-        height: 145px;
+  .achievements-title-text p {
+    font-size: 0.78rem;
+  }
 
-        opacity: 0.85;
-    }
+  /* Collection header */
 
-
-    .achievements-title-text {
-        max-width: 60%;
-    }
-
-
-    .achievements-title-text h1 {
-        font-size: 2rem;
-    }
-
-
-    .achievements-title-text p {
-        font-size: 0.78rem;
-    }
-
-
-    /* Collection header */
-
-    .achievement-section-header {
-        align-items: flex-start;
-    }
-
+  .achievement-section-header {
+    align-items: flex-start;
+  }
 }
 @media (max-width: 520px) {
+  .achievements-page {
+    padding: 24px 14px 110px;
+  }
 
-    .achievements-page {
-        padding: 24px 14px 110px;
-    }
+  .achievements-header {
+    padding: 22px;
 
+    min-height: 155px;
+  }
 
-    .achievements-header {
-        padding: 22px;
+  .achievements-title-icon {
+    width: 50px;
+    height: 50px;
 
-        min-height: 155px;
-    }
+    border-radius: 16px;
+  }
 
+  .achievements-title-icon .material-symbols-rounded {
+    font-size: 27px;
+  }
 
-    .achievements-title-icon {
-        width: 50px;
-        height: 50px;
+  .achievements-title-text {
+    max-width: 100%;
+  }
 
-        border-radius: 16px;
-    }
+  .achievements-title-text h1 {
+    font-size: 1.7rem;
+  }
 
+  .achievements-title-text p {
+    max-width: 240px;
 
-    .achievements-title-icon .material-symbols-rounded {
-        font-size: 27px;
-    }
+    font-size: 0.72rem;
+  }
 
+  .achievements-header-avatar {
+    display: none;
+  }
 
-    .achievements-title-text {
-        max-width: 100%;
-    }
+  .achievement-summary {
+    padding: 18px;
+  }
 
+  .achievement-summary-item {
+    gap: 9px;
+  }
 
-    .achievements-title-text h1 {
-        font-size: 1.7rem;
-    }
+  .summary-icon {
+    width: 42px;
+    height: 42px;
+  }
 
+  .summary-icon .material-symbols-rounded {
+    font-size: 22px;
+  }
 
-    .achievements-title-text p {
-        max-width: 240px;
+  .summary-info strong {
+    font-size: 1.05rem;
+  }
 
-        font-size: 0.72rem;
-    }
+  .summary-info span {
+    font-size: 0.65rem;
+  }
 
+  .achievement-section-header h2 {
+    font-size: 1.15rem;
+  }
 
-    .achievements-header-avatar {
-        display: none;
-    }
+  .achievement-section-header p {
+    font-size: 0.72rem;
+  }
 
+  .achievement-progress span {
+    font-size: 0.85rem;
+  }
 
-    .achievement-summary {
-        padding: 18px;
-    }
-
-
-    .achievement-summary-item {
-        gap: 9px;
-    }
-
-
-    .summary-icon {
-        width: 42px;
-        height: 42px;
-    }
-
-
-    .summary-icon .material-symbols-rounded {
-        font-size: 22px;
-    }
-
-
-    .summary-info strong {
-        font-size: 1.05rem;
-    }
-
-
-    .summary-info span {
-        font-size: 0.65rem;
-    }
-
-
-    .achievement-section-header h2 {
-        font-size: 1.15rem;
-    }
-
-
-    .achievement-section-header p {
-        font-size: 0.72rem;
-    }
-
-
-    .achievement-progress span {
-        font-size: 0.85rem;
-    }
-
-
-    .achievement-card {
-        padding: 18px;
-    }
-
+  .achievement-card {
+    padding: 18px;
+  }
 }
