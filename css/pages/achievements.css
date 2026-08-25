@@ -286,36 +286,6 @@
   margin: 30px auto 0;
 }
 
-/* =========================================================
-   ACHIEVEMENT PROGRESS
-========================================================= */
-
-.achievement-progress {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-
-  flex-shrink: 0;
-}
-
-.achievement-progress span {
-  color: var(--clr-secondary-deep);
-
-  font-size: 1rem;
-  font-weight: 800;
-}
-
-.achievement-progress small {
-  margin-top: 3px;
-
-  color: var(--clr-text-soft);
-
-  font-size: 0.68rem;
-  font-weight: 700;
-
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
 
 /* =========================================================
    ACHIEVEMENT CATEGORY SECTIONS
@@ -660,16 +630,12 @@
 ========================================================= */
 
 .achievement-filters {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-  gap: 8px;
-
-  margin-top: 18px;
-
-  overflow-x: auto;
-
-  scrollbar-width: none;
+    width: 100%;
+    margin-bottom: 24px;
 }
 
 .achievement-filters::-webkit-scrollbar {
@@ -680,36 +646,93 @@
    FILTER BUTTON
 ========================================================= */
 
+/* =========================================================
+   ACHIEVEMENT FILTERS
+========================================================= */
+
+.achievement-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+    margin-bottom: 24px;
+}
+
 .achievement-filter {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-  gap: 6px;
+    gap: 5px;
 
-  flex-shrink: 0;
+    padding: 8px 13px;
 
-  padding: 8px 13px;
+    border: 1px solid transparent;
+    border-radius: 999px;
 
-  border-radius: 999px;
+    background: transparent;
 
-  background: rgba(255, 255, 255, 0.22);
+    color: var(--clr-text-soft);
 
-  border: 1px solid var(--border-glass);
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    font-weight: 700;
 
-  color: var(--clr-text-soft);
+    cursor: pointer;
 
-  font-size: 0.72rem;
-  font-weight: 700;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .achievement-filter .material-symbols-rounded {
-  font-size: 17px;
+    font-size: 17px;
+}
+
+.achievement-filter:hover {
+    background: rgba(123, 104, 255, 0.07);
+    color: var(--clr-text-heading);
+}
+
+.achievement-filter.active {
+    background: rgba(123, 104, 255, 0.11);
+    border-color: rgba(123, 104, 255, 0.16);
+
+    color: var(--clr-secondary-deep);
+}
+
+
+/* =========================================================
+   ACHIEVEMENT COLLECTION PROGRESS
+========================================================= */
+
+.achievement-progress {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+
+    margin-left: auto;
+
+    white-space: nowrap;
+}
+
+.achievement-progress span {
+    color: var(--clr-text-heading);
+
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.achievement-progress small {
+    color: var(--clr-text-soft);
+
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 600;
 }
 
 /* =========================================================
@@ -863,9 +886,21 @@
     font-size: 0.65rem;
   }
 
-  .achievement-progress span {
-    font-size: 0.85rem;
-  }
+    .achievement-filters {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .achievement-filter {
+        padding: 7px 10px;
+        font-size: 0.7rem;
+    }
+
+    .achievement-progress {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 4px;
+    }
 
   .achievement-card {
     padding: 18px;
