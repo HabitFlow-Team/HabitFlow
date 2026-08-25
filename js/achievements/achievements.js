@@ -278,25 +278,85 @@ function updateAchievementSummary(achievements, habits = []) {
  *
  * Generates all achievement cards from ACHIEVEMENTS.
  */
+/**
+ * =========================================================
+ * RENDER ACHIEVEMENTS
+ * =========================================================
+ *
+ * Generates achievement cards and places them
+ * into their respective category sections.
+ */
 function renderAchievements() {
-  const grid = document.getElementById("achievement-grid");
 
-  if (!grid) return;
+    const streakGrid =
+        document.getElementById("streak-achievement-grid");
 
-  /* ---------------------------------------------
+    const habitGrid =
+        document.getElementById("habit-achievement-grid");
+
+    const milestoneGrid =
+        document.getElementById("milestone-achievement-grid");
+
+
+    if (!streakGrid || !habitGrid || !milestoneGrid) {
+        return;
+    }
+
+
+    /* ---------------------------------------------
        Load user's habits
     --------------------------------------------- */
 
-  const habits = typeof loadUserHabits === "function" ? loadUserHabits() : [];
+    const habits =
+        typeof loadUserHabits === "function"
+            ? loadUserHabits()
+            : [];
 
-  /* ---------------------------------------------
-       Generate achievement cards
+
+    /* ---------------------------------------------
+       Clear existing cards
     --------------------------------------------- */
 
-  grid.innerHTML = ACHIEVEMENTS.map((achievement) =>
-    createAchievementCard(achievement, habits),
-  ).join("");
-  updateAchievementSummary(ACHIEVEMENTS, habits);
+    streakGrid.innerHTML = "";
+    habitGrid.innerHTML = "";
+    milestoneGrid.innerHTML = "";
+
+
+    /* ---------------------------------------------
+       Render achievements by category
+    --------------------------------------------- */
+
+    ACHIEVEMENTS.forEach((achievement) => {
+
+        const card =
+            createAchievementCard(achievement, habits);
+
+
+        switch (achievement.category) {
+
+            case "streak":
+                streakGrid.insertAdjacentHTML("beforeend", card);
+                break;
+
+            case "habit":
+                habitGrid.insertAdjacentHTML("beforeend", card);
+                break;
+
+            case "milestone":
+                milestoneGrid.insertAdjacentHTML("beforeend", card);
+                break;
+
+        }
+
+    });
+
+
+    /* ---------------------------------------------
+       Update summary
+    --------------------------------------------- */
+
+    updateAchievementSummary(ACHIEVEMENTS, habits);
+
 }
 
 /**
