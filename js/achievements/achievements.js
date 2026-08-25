@@ -246,6 +246,10 @@ function updateAchievementSummary(achievements, habits = []) {
 
   const bestStreakElement = document.getElementById("summary-best-streak");
 
+  const achievementProgressElement = document.getElementById(
+    "achievement-progress-count",
+  );
+
   if (unlockedElement) {
     unlockedElement.textContent = unlockedCount;
   }
@@ -260,6 +264,10 @@ function updateAchievementSummary(achievements, habits = []) {
 
   if (bestStreakElement) {
     bestStreakElement.textContent = bestStreak;
+  }
+
+  if (achievementProgressElement) {
+    achievementProgressElement.textContent = `${unlockedCount} / ${achievements.length}`;
   }
 }
 
