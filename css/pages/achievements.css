@@ -287,36 +287,6 @@
 }
 
 /* =========================================================
-   SECTION HEADER
-========================================================= */
-
-.achievement-section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 20px;
-}
-
-.achievement-section-header h2 {
-  font-family: var(--font-heading);
-
-  font-size: 1.35rem;
-  font-weight: 800;
-
-  color: var(--clr-text-heading);
-}
-
-.achievement-section-header p {
-  margin-top: 5px;
-
-  color: var(--clr-text-soft);
-
-  font-size: 0.82rem;
-  font-weight: 500;
-}
-
-/* =========================================================
    ACHIEVEMENT PROGRESS
 ========================================================= */
 
@@ -826,9 +796,7 @@
 
   /* Collection header */
 
-  .achievement-section-header {
-    align-items: flex-start;
-  }
+
 }
 @media (max-width: 520px) {
   .achievements-page {
@@ -893,14 +861,6 @@
 
   .summary-info span {
     font-size: 0.65rem;
-  }
-
-  .achievement-section-header h2 {
-    font-size: 1.15rem;
-  }
-
-  .achievement-section-header p {
-    font-size: 0.72rem;
   }
 
   .achievement-progress span {
