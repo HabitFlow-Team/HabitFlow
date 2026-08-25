@@ -348,6 +348,44 @@
 }
 
 /* =========================================================
+   ACHIEVEMENT CATEGORY SECTIONS
+========================================================= */
+
+.achievement-category-section {
+    margin-top: 28px;
+}
+
+.achievement-category-section:first-of-type {
+    margin-top: 18px;
+}
+
+.achievement-category-header {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+.achievement-category-header h3 {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--clr-text-heading);
+
+    font-family: var(--font-heading);
+
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.achievement-category-header .material-symbols-rounded {
+    font-size: 20px;
+    color: var(--clr-secondary-deep);
+}
+
+/* =========================================================
    ACHIEVEMENT GRID
 ========================================================= */
 
