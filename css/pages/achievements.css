@@ -503,6 +503,52 @@
   color: var(--cat-health);
 }
 /* =========================================================
+   ACHIEVEMENT CARD PROGRESS
+========================================================= */
+
+.achievement-card-progress {
+    margin-top: 16px;
+}
+
+.achievement-progress-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    color: var(--clr-text-soft);
+
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.achievement-progress-label span:last-child {
+    color: var(--clr-secondary-deep);
+    font-weight: 800;
+}
+
+.achievement-progress-bar {
+    width: 100%;
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: rgba(123, 104, 255, 0.10);
+}
+
+.achievement-progress-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--grad-btn);
+
+    transition: width 0.4s ease;
+}
+/* =========================================================
    LOCKED ACHIEVEMENT
 ========================================================= */
 
