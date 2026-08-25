@@ -287,76 +287,57 @@ function updateAchievementSummary(achievements, habits = []) {
  * into their respective category sections.
  */
 function renderAchievements() {
+  const streakGrid = document.getElementById("streak-achievement-grid");
 
-    const streakGrid =
-        document.getElementById("streak-achievement-grid");
+  const habitGrid = document.getElementById("habit-achievement-grid");
 
-    const habitGrid =
-        document.getElementById("habit-achievement-grid");
+  const milestoneGrid = document.getElementById("milestone-achievement-grid");
 
-    const milestoneGrid =
-        document.getElementById("milestone-achievement-grid");
+  if (!streakGrid || !habitGrid || !milestoneGrid) {
+    return;
+  }
 
-
-    if (!streakGrid || !habitGrid || !milestoneGrid) {
-        return;
-    }
-
-
-    /* ---------------------------------------------
+  /* ---------------------------------------------
        Load user's habits
     --------------------------------------------- */
 
-    const habits =
-        typeof loadUserHabits === "function"
-            ? loadUserHabits()
-            : [];
+  const habits = typeof loadUserHabits === "function" ? loadUserHabits() : [];
 
-
-    /* ---------------------------------------------
+  /* ---------------------------------------------
        Clear existing cards
     --------------------------------------------- */
 
-    streakGrid.innerHTML = "";
-    habitGrid.innerHTML = "";
-    milestoneGrid.innerHTML = "";
+  streakGrid.innerHTML = "";
+  habitGrid.innerHTML = "";
+  milestoneGrid.innerHTML = "";
 
-
-    /* ---------------------------------------------
+  /* ---------------------------------------------
        Render achievements by category
     --------------------------------------------- */
 
-    ACHIEVEMENTS.forEach((achievement) => {
+  ACHIEVEMENTS.forEach((achievement) => {
+    const card = createAchievementCard(achievement, habits);
 
-        const card =
-            createAchievementCard(achievement, habits);
+    switch (achievement.category) {
+      case "streak":
+        streakGrid.insertAdjacentHTML("beforeend", card);
+        break;
 
+      case "habit":
+        habitGrid.insertAdjacentHTML("beforeend", card);
+        break;
 
-        switch (achievement.category) {
+      case "milestone":
+        milestoneGrid.insertAdjacentHTML("beforeend", card);
+        break;
+    }
+  });
 
-            case "streak":
-                streakGrid.insertAdjacentHTML("beforeend", card);
-                break;
-
-            case "habit":
-                habitGrid.insertAdjacentHTML("beforeend", card);
-                break;
-
-            case "milestone":
-                milestoneGrid.insertAdjacentHTML("beforeend", card);
-                break;
-
-        }
-
-    });
-
-
-    /* ---------------------------------------------
+  /* ---------------------------------------------
        Update summary
     --------------------------------------------- */
 
-    updateAchievementSummary(ACHIEVEMENTS, habits);
-
+  updateAchievementSummary(ACHIEVEMENTS, habits);
 }
 
 /**
@@ -371,6 +352,10 @@ function setupAchievementFilters() {
   const filterButtons = document.querySelectorAll(".achievement-filter");
 
   const cards = document.querySelectorAll(".achievement-card");
+
+  const categorySections = document.querySelectorAll(
+    ".achievement-category-section",
+  );
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -390,13 +375,20 @@ function setupAchievementFilters() {
                Filter achievement cards
             --------------------------------------------- */
 
-      cards.forEach((card) => {
-        const cardCategory = card.dataset.category;
+      categorySections.forEach((section) => {
+        const categoryGrid = section.querySelector(".achievement-grid");
+
+        if (!categoryGrid) return;
+
+        const sectionCategory = categoryGrid.id.replace(
+          "-achievement-grid",
+          "",
+        );
 
         const shouldShow =
-          selectedCategory === "all" || cardCategory === selectedCategory;
+          selectedCategory === "all" || sectionCategory === selectedCategory;
 
-        card.style.display = shouldShow ? "" : "none";
+        section.style.display = shouldShow ? "" : "none";
       });
     });
   });
