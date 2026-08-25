@@ -106,6 +106,16 @@ function getAchievementProgress(achievement, habits = []) {
 function createAchievementCard(achievement, habits = []) {
   const unlocked = isAchievementUnlocked(achievement, habits);
 
+  const progress = Math.min(
+    getAchievementProgress(achievement, habits),
+    achievement.requirement,
+  );
+
+  const progressPercentage =
+    achievement.requirement > 0
+      ? Math.round((progress / achievement.requirement) * 100)
+      : 0;
+
   const cardState = unlocked ? "achievement-unlocked" : "achievement-locked";
 
   const statusText = unlocked ? "UNLOCKED" : "LOCKED";
@@ -149,6 +159,24 @@ function createAchievementCard(achievement, habits = []) {
         <p>
           ${achievement.description}
         </p>
+
+      </div>
+
+      <!-- Achievement progress -->
+
+      <div class="achievement-card-progress">
+
+        <div class="achievement-progress-label">
+          <span>Progress</span>
+          <span>${progress} / ${achievement.requirement}</span>
+        </div>
+
+        <div class="achievement-progress-bar">
+          <div
+            class="achievement-progress-fill"
+            style="width: ${progressPercentage}%"
+          ></div>
+        </div>
 
       </div>
 
