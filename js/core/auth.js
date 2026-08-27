@@ -1,28 +1,18 @@
 // ============================================
 // HabitFlow — auth.js
-// Fake Frontend Authentication System
+// Real Backend Authentication (Express + MongoDB)
 // ============================================
 
 // ============================================
 // TOAST
 // ============================================
-
 function showToast(message, type = "info") {
   const toast = document.getElementById("toast");
 
   let icon = "info";
-
-  if (type === "success") {
-    icon = "check_circle";
-  }
-
-  if (type === "error") {
-    icon = "error";
-  }
-
-  if (type === "warning") {
-    icon = "lock";
-  }
+  if (type === "success") icon = "check_circle";
+  if (type === "error") icon = "error";
+  if (type === "warning") icon = "lock";
 
   toast.innerHTML = `
   <span class="material-symbols-rounded toast-icon toast-icon-${type}">
@@ -32,10 +22,7 @@ function showToast(message, type = "info") {
 `;
 
   toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2500);
+  setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
 // Get current logged in user
@@ -54,13 +41,12 @@ function isAuthenticated() {
 
 /**
  * Check whether the current user has admin privileges.
- *
- * Keeps permission logic centralized so other
- * features do not need to check `isAdmin` directly.
+ * Frontend check is for UI convenience only (show/hide admin menu) —
+ * the backend independently verifies isAdmin from the database on
+ * every admin request, so this can never be spoofed for real access.
  */
 function hasAdminPrivileges() {
   const user = getCurrentUser();
-
   return user?.isAdmin === true;
 }
 
@@ -72,178 +58,137 @@ function saveSession(user) {
 // Logout user
 function logoutUser() {
   Storage.remove(STORAGE_KEYS.CURRENT_USER);
-
   window.location.href = "index.html";
 }
 
 // ============================================
-// REGISTER
+// REGISTER — real backend call
 // ============================================
+async function registerUser(firstName, lastName, email, password) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: `${firstName} ${lastName}`.trim(),
+        email,
+        password,
+      }),
+    });
 
-function registerUser(username, firstName, lastName, email, password) {
-  const users = Storage.get(STORAGE_KEYS.USERS) || [];
+    const data = await res.json();
 
-  // Check if email already exists
-  const userExists = users.some((user) => user.email === email);
+    if (!res.ok) {
+      return { success: false, message: data.message || "Registration failed" };
+    }
 
-  if (userExists) {
-    return {
-      success: false,
-      message: "User already exists",
+    const [fName, ...rest] = data.user.name.split(" ");
+    const lName = rest.join(" ");
+
+    const sessionUser = {
+      id: data.user.id,
+      username: data.user.name,
+      firstName: fName,
+      lastName: lName,
+      email: data.user.email,
+      isAdmin: data.user.isAdmin,
+      token: data.token,
     };
+
+    saveSession(sessionUser);
+    return { success: true, user: sessionUser };
+  } catch (err) {
+    return { success: false, message: "Could not reach server. Is the backend running?" };
   }
-
-  const newUser = {
-    id: Date.now(),
-
-    username,
-    firstName,
-    lastName,
-
-    email,
-    password,
-
-    dob: "",
-
-    avatar: "",
-
-    habits: [],
-
-    createdAt: new Date().toISOString(),
-  };
-
-  users.push(newUser);
-
-  Storage.set(STORAGE_KEYS.USERS, users);
-
-  saveSession(newUser);
-
-  return {
-    success: true,
-    user: newUser,
-  };
-}
-
-function loginUser(email, password) {
-  // ============================================
-  // SYSTEM MANAGER LOGIN
-  // ============================================
-
-  const SYSTEM_MANAGER_EMAIL = "systemmanager@habitflow.local";
-  const SYSTEM_MANAGER_PASSWORD = "SystemManager@123";
-
-  if (email === SYSTEM_MANAGER_EMAIL && password === SYSTEM_MANAGER_PASSWORD) {
-    const systemManager = {
-      id: "system-manager",
-      username: "System Manager",
-      firstName: "System",
-      lastName: "Manager",
-      email: SYSTEM_MANAGER_EMAIL,
-      password: SYSTEM_MANAGER_PASSWORD,
-
-      dob: "",
-      avatar: "basic",
-      avatarName: "Streaksaur Prime",
-
-      habits: [],
-
-      // Special role
-      isAdmin: true,
-    };
-
-    saveSession(systemManager);
-
-    return {
-      success: true,
-      user: systemManager,
-    };
-  }
-
-  // ============================================
-  // NORMAL USER LOGIN
-  // ============================================
-
-  const users = Storage.get(STORAGE_KEYS.USERS) || [];
-
-  const foundUser = users.find(
-    (user) => user.email === email && user.password === password,
-  );
-
-  if (!foundUser) {
-    return {
-      success: false,
-      message: "Invalid credentials",
-    };
-  }
-
-  saveSession(foundUser);
-
-  return {
-    success: true,
-    user: foundUser,
-  };
 }
 
 // ============================================
-// GUEST LOGIN
+// LOGIN — real backend call
 // ============================================
+async function loginUser(email, password) {
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { success: false, message: data.message || "Login failed" };
+    }
+
+    const [fName, ...rest] = data.user.name.split(" ");
+    const lName = rest.join(" ");
+
+    const sessionUser = {
+      id: data.user.id,
+      username: data.user.name,
+      firstName: fName,
+      lastName: lName,
+      email: data.user.email,
+      isAdmin: data.user.isAdmin,
+      token: data.token,
+    };
+
+    saveSession(sessionUser);
+    return { success: true, user: sessionUser };
+  } catch (err) {
+    return { success: false, message: "Could not reach server. Is the backend running?" };
+  }
+}
+
+// ============================================
+// GUEST LOGIN (still local-only, no backend)
+// ============================================
 function loginAsGuest() {
   const guestUser = {
     id: "guest",
     username: "Guest",
     email: null,
-    habits: [],
     isGuest: true,
   };
-
   saveSession(guestUser);
-
   return guestUser;
 }
 
 const guestBtn = document.getElementById("guestBtn");
-
 guestBtn?.addEventListener("click", () => {
   loginAsGuest();
-
   window.location.href = "dashboard.html";
 });
 
 // ============================================
 // REGISTER FORM
 // ============================================
-
 const registerForm = document.getElementById("register-form");
 
-registerForm?.addEventListener("submit", (e) => {
+registerForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const firstName = document.getElementById("firstName")?.value.trim();
-
   const lastName = document.getElementById("lastName")?.value.trim();
-
   const email = document.getElementById("email")?.value.trim();
-
   const password = document.getElementById("password")?.value;
-
   const confirmPassword = document.getElementById("confirmPassword")?.value;
 
-  // Basic validation
   if (!firstName || !lastName || !email || !password) {
     showToast("Please fill all fields", "error");
     return;
   }
 
-  // Password match check
   if (password !== confirmPassword) {
     showToast("Passwords do not match", "error");
     return;
   }
 
-  const username = `${firstName} ${lastName}`;
+  const submitBtn = registerForm.querySelector(".btn-auth");
+  if (submitBtn) submitBtn.disabled = true;
 
-  const result = registerUser(username, firstName, lastName, email, password);
+  const result = await registerUser(firstName, lastName, email, password);
+
+  if (submitBtn) submitBtn.disabled = false;
 
   if (!result.success) {
     showToast(result.message, "error");
@@ -251,7 +196,6 @@ registerForm?.addEventListener("submit", (e) => {
   }
 
   showToast("Account created successfully ✨", "success");
-
   setTimeout(() => {
     window.location.href = "dashboard.html";
   }, 1200);
@@ -260,14 +204,12 @@ registerForm?.addEventListener("submit", (e) => {
 // ============================================
 // LOGIN FORM
 // ============================================
-
 const loginForm = document.getElementById("login-form");
 
-loginForm?.addEventListener("submit", (e) => {
+loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = document.getElementById("email")?.value.trim();
-
   const password = document.getElementById("password")?.value;
 
   if (!email || !password) {
@@ -275,7 +217,12 @@ loginForm?.addEventListener("submit", (e) => {
     return;
   }
 
-  const result = loginUser(email, password);
+  const submitBtn = loginForm.querySelector(".btn-auth");
+  if (submitBtn) submitBtn.disabled = true;
+
+  const result = await loginUser(email, password);
+
+  if (submitBtn) submitBtn.disabled = false;
 
   if (!result.success) {
     showToast(result.message, "error");
@@ -283,7 +230,6 @@ loginForm?.addEventListener("submit", (e) => {
   }
 
   showToast("Welcome back ✨", "success");
-
   setTimeout(() => {
     window.location.href = "dashboard.html";
   }, 1200);
