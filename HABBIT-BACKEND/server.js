@@ -7,8 +7,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// AUTH routes (register/login) — open to everyone
 const authRoutes = require("./routes/authRoutes");
 app.use("/api/auth", authRoutes);
+
+// HABITS routes — protected, needs login
+const habitRoutes = require("./routes/habitRoutes");
+const protect = require("./middleware/auth");
+app.use("/api/habits", protect, habitRoutes);
+
+// ADMIN routes — protected, needs login + isAdmin true
+const adminRoutes = require("./routes/adminRoutes");
+const requireAdmin = require("./middleware/admin");
+app.use("/api/admin", protect, requireAdmin, adminRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
