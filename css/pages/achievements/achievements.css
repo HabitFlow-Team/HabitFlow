@@ -148,134 +148,6 @@
 }
 
 /* =========================================================
-   ACHIEVEMENT SUMMARY
-========================================================= */
-
-.achievement-summary {
-  width: 100%;
-  max-width: 780px;
-  margin: 18px auto 0;
-
-  display: grid;
-
-  grid-template-columns:
-    1fr auto
-    1fr auto
-    1fr auto
-    1fr;
-
-  align-items: center;
-
-  padding: 20px 26px;
-
-  border-radius: var(--radius-2xl);
-
-  background: var(--bg-card);
-
-  border: 1px solid var(--border-glass);
-
-  box-shadow: var(--shadow-soft);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-/* =========================================================
-   SUMMARY ITEM
-========================================================= */
-
-.achievement-summary-item {
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  min-width: 0;
-}
-
-/* =========================================================
-   SUMMARY ICON
-========================================================= */
-
-.summary-icon {
-  width: 48px;
-  height: 48px;
-
-  flex-shrink: 0;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 15px;
-
-  box-shadow: var(--shadow-soft);
-}
-
-.summary-icon .material-symbols-rounded {
-  font-size: 25px;
-}
-
-/* Individual icon styles */
-
-.summary-unlocked {
-  background: rgba(243, 182, 218, 0.38);
-  color: var(--clr-primary-strong);
-}
-
-.summary-locked {
-  background: rgba(251, 191, 36, 0.15);
-  color: #f59e0b;
-}
-
-.summary-points {
-  background: rgba(199, 184, 255, 0.38);
-  color: var(--clr-secondary-deep);
-}
-
-.summary-streak {
-  background: rgba(255, 205, 120, 0.2);
-  color: #f59e0b;
-}
-
-/* =========================================================
-   SUMMARY TEXT
-========================================================= */
-
-.summary-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.summary-info strong {
-  color: var(--clr-text-heading);
-
-  font-size: 1.25rem;
-  font-weight: 800;
-
-  line-height: 1.1;
-}
-
-.summary-info span {
-  margin-top: 4px;
-
-  color: var(--clr-text-soft);
-
-  font-size: 0.72rem;
-  font-weight: 600;
-}
-
-/* =========================================================
-   DIVIDERS
-========================================================= */
-
-.summary-divider {
-  width: 1px;
-  height: 42px;
-
-  background: rgba(123, 104, 255, 0.15);
-}
-
-/* =========================================================
    ACHIEVEMENT COLLECTION
 ========================================================= */
 
@@ -286,43 +158,42 @@
   margin: 30px auto 0;
 }
 
-
 /* =========================================================
    ACHIEVEMENT CATEGORY SECTIONS
 ========================================================= */
 
 .achievement-category-section {
-    margin-top: 28px;
+  margin-top: 28px;
 }
 
 .achievement-category-section:first-of-type {
-    margin-top: 18px;
+  margin-top: 18px;
 }
 
 .achievement-category-header {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 .achievement-category-header h3 {
-    display: inline-flex;
-    align-items: center;
+  display: inline-flex;
+  align-items: center;
 
-    gap: 7px;
+  gap: 7px;
 
-    color: var(--clr-text-heading);
+  color: var(--clr-text-heading);
 
-    font-family: var(--font-heading);
+  font-family: var(--font-heading);
 
-    font-size: 0.95rem;
-    font-weight: 800;
+  font-size: 0.95rem;
+  font-weight: 800;
 }
 
 .achievement-category-header .material-symbols-rounded {
-    font-size: 20px;
-    color: var(--clr-secondary-deep);
+  font-size: 20px;
+  color: var(--clr-secondary-deep);
 }
 
 /* =========================================================
@@ -630,12 +501,12 @@
 ========================================================= */
 
 .achievement-filters {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-    width: 100%;
-    margin-bottom: 24px;
+  width: 100%;
+  margin-bottom: 24px;
 }
 
 .achievement-filters::-webkit-scrollbar {
@@ -651,88 +522,87 @@
 ========================================================= */
 
 .achievement-filters {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-    width: 100%;
-    margin-bottom: 24px;
+  width: 100%;
+  margin-bottom: 24px;
 }
 
 .achievement-filter {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    gap: 5px;
+  gap: 5px;
 
-    padding: 8px 13px;
+  padding: 8px 13px;
 
-    border: 1px solid transparent;
-    border-radius: 999px;
+  border: 1px solid transparent;
+  border-radius: 999px;
 
-    background: transparent;
+  background: transparent;
 
-    color: var(--clr-text-soft);
+  color: var(--clr-text-soft);
 
-    font-family: var(--font-body);
-    font-size: 0.76rem;
-    font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .achievement-filter .material-symbols-rounded {
-    font-size: 17px;
+  font-size: 17px;
 }
 
 .achievement-filter:hover {
-    background: rgba(123, 104, 255, 0.07);
-    color: var(--clr-text-heading);
+  background: rgba(123, 104, 255, 0.07);
+  color: var(--clr-text-heading);
 }
 
 .achievement-filter.active {
-    background: rgba(123, 104, 255, 0.11);
-    border-color: rgba(123, 104, 255, 0.16);
+  background: rgba(123, 104, 255, 0.11);
+  border-color: rgba(123, 104, 255, 0.16);
 
-    color: var(--clr-secondary-deep);
+  color: var(--clr-secondary-deep);
 }
-
 
 /* =========================================================
    ACHIEVEMENT COLLECTION PROGRESS
 ========================================================= */
 
 .achievement-progress {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
 
-    margin-left: auto;
+  margin-left: auto;
 
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .achievement-progress span {
-    color: var(--clr-text-heading);
+  color: var(--clr-text-heading);
 
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
-    font-weight: 800;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 800;
 }
 
 .achievement-progress small {
-    color: var(--clr-text-soft);
+  color: var(--clr-text-soft);
 
-    font-family: var(--font-body);
-    font-size: 0.68rem;
-    font-weight: 600;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
 }
 
 /* =========================================================
@@ -760,26 +630,12 @@
 
   box-shadow: var(--shadow-btn);
 }
-/* =========================================================
-   SUMMARY — RESPONSIVE
-========================================================= */
 
 /* =========================================================
    ACHIEVEMENTS — RESPONSIVE
 ========================================================= */
 
 @media (max-width: 800px) {
-  /* Summary */
-
-  .achievement-summary {
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 18px 20px;
-  }
-
-  .summary-divider {
-    display: none;
-  }
 
   /* Achievement grid */
 
@@ -818,8 +674,6 @@
   }
 
   /* Collection header */
-
-
 }
 @media (max-width: 520px) {
   .achievements-page {
@@ -861,46 +715,21 @@
     display: none;
   }
 
-  .achievement-summary {
-    padding: 18px;
+  .achievement-filters {
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
-  .achievement-summary-item {
-    gap: 9px;
+  .achievement-filter {
+    padding: 7px 10px;
+    font-size: 0.7rem;
   }
 
-  .summary-icon {
-    width: 42px;
-    height: 42px;
+  .achievement-progress {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 4px;
   }
-
-  .summary-icon .material-symbols-rounded {
-    font-size: 22px;
-  }
-
-  .summary-info strong {
-    font-size: 1.05rem;
-  }
-
-  .summary-info span {
-    font-size: 0.65rem;
-  }
-
-    .achievement-filters {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    .achievement-filter {
-        padding: 7px 10px;
-        font-size: 0.7rem;
-    }
-
-    .achievement-progress {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 4px;
-    }
 
   .achievement-card {
     padding: 18px;
