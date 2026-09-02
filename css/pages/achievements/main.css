@@ -1,0 +1,308 @@
+/* =========================================================
+   HABITFLOW — ACHIEVEMENTS PAGE
+========================================================= */
+
+.achievements-page {
+  min-height: 100vh;
+
+  background: var(--grad-page);
+
+  color: var(--clr-text-main);
+  font-family: var(--font-main);
+
+  position: relative;
+
+  overflow-x: hidden;
+
+  padding: 40px 20px 120px;
+}
+
+/* =========================================================
+   ACHIEVEMENTS HEADER
+========================================================= */
+
+.achievements-header {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+
+  min-height: 190px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 28px 36px;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-2xl);
+
+  background: var(--bg-glass);
+
+  border: 1px solid var(--border-glass);
+
+  box-shadow: var(--shadow-ui);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* =========================================================
+   HEADER CONTENT
+========================================================= */
+
+.achievements-header-content {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   TITLE ICON
+========================================================= */
+
+.achievements-title-icon {
+  width: 62px;
+  height: 62px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 20px;
+
+  background: var(--grad-accent);
+
+  color: var(--clr-secondary-deep);
+
+  box-shadow: var(--shadow-soft);
+}
+
+.achievements-title-icon .material-symbols-rounded {
+  font-size: 32px;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.achievements-title-text h1 {
+  font-family: var(--font-heading);
+
+  font-size: var(--fs-h1);
+  font-weight: 800;
+
+  line-height: 1.1;
+
+  color: var(--clr-text-heading);
+}
+
+.achievements-title-text p {
+  margin-top: 8px;
+
+  max-width: 430px;
+
+  color: var(--clr-text-soft);
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   STREAKSAUR
+========================================================= */
+
+.achievements-header-avatar {
+  position: absolute;
+
+  right: 30px;
+  bottom: -18px;
+
+  width: 190px;
+  height: 190px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  z-index: 1;
+}
+
+.achievements-header-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 12px 18px rgba(126, 102, 190, 0.16));
+}
+
+/* =========================================================
+   ACHIEVEMENT COLLECTION
+========================================================= */
+
+.achievement-collection {
+  width: 100%;
+  max-width: 780px;
+
+  margin: 30px auto 0;
+}
+
+/* =========================================================
+   ACHIEVEMENT CATEGORY SECTIONS
+========================================================= */
+
+.achievement-category-section {
+  margin-top: 28px;
+}
+
+.achievement-category-section:first-of-type {
+  margin-top: 18px;
+}
+
+.achievement-category-header {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 12px;
+}
+
+.achievement-category-header h3 {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: var(--clr-text-heading);
+
+  font-family: var(--font-heading);
+
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.achievement-category-header .material-symbols-rounded {
+  font-size: 20px;
+  color: var(--clr-secondary-deep);
+}
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.achievement-filter:hover {
+  transform: translateY(-1px);
+
+  background: var(--bg-card-strong);
+
+  color: var(--clr-text-heading);
+}
+
+/* =========================================================
+   ACTIVE FILTER
+========================================================= */
+
+.achievement-filter.active {
+  background: var(--grad-btn);
+
+  border-color: transparent;
+
+  color: var(--clr-text-white);
+
+  box-shadow: var(--shadow-btn);
+}
+
+/* =========================================================
+   ACHIEVEMENTS — RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+
+
+  /* Header */
+
+  .achievements-header {
+    padding: 24px;
+
+    min-height: 170px;
+  }
+
+  .achievements-header-avatar {
+    right: 8px;
+    bottom: -12px;
+
+    width: 145px;
+    height: 145px;
+
+    opacity: 0.85;
+  }
+
+  .achievements-title-text {
+    max-width: 60%;
+  }
+
+  .achievements-title-text h1 {
+    font-size: 2rem;
+  }
+
+  .achievements-title-text p {
+    font-size: 0.78rem;
+  }
+
+  /* Collection header */
+}
+@media (max-width: 520px) {
+  .achievements-page {
+    padding: 24px 14px 110px;
+  }
+
+  .achievements-header {
+    padding: 22px;
+
+    min-height: 155px;
+  }
+
+  .achievements-title-icon {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 16px;
+  }
+
+  .achievements-title-icon .material-symbols-rounded {
+    font-size: 27px;
+  }
+
+  .achievements-title-text {
+    max-width: 100%;
+  }
+
+  .achievements-title-text h1 {
+    font-size: 1.7rem;
+  }
+
+  .achievements-title-text p {
+    max-width: 240px;
+
+    font-size: 0.72rem;
+  }
+
+  .achievements-header-avatar {
+    display: none;
+  }
+
+  .achievement-card {
+    padding: 18px;
+  }
+}
