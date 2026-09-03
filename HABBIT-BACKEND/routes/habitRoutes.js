@@ -58,3 +58,51 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
+
+/* =========================
+   COMPLETE HABIT
+========================= */
+router.patch("/:id/complete", async (req, res) => {
+  try {
+    const habit = await Habit.findOne({ _id: req.params.id, user: req.userId });
+    if (!habit) return res.status(404).json({ message: "Habit not found" });
+
+    // save snapshot for undo
+    habit.undoSnapshot = {
+      streak: habit.streak,
+      total: habit.total,
+      best: habit.best,
+      lastCompletedDate: habit.lastCompletedDate,
+      completedToday: habit.completedToday,
+      completedDates: [...habit.completedDates],
+    };
+
+    const today = new Date().toDateString();
+
+    // date-gap aware streak calculation
+    if (!habit.lastCompletedDate) {
+      habit.streak = 1;
+    } else {
+      const diffDays = Math.floor(
+        (new Date(today) - new Date(habit.lastCompletedDate)) / (1000 * 60 * 60 * 24)
+      );
+      if (diffDays === 1) habit.streak++;
+      else if (diffDays > 1) habit.streak = 1;
+    }
+
+    habit.completedToday = true;
+    habit.lastCompletedDate = today;
+    habit.total++;
+    habit.best = Math.max(habit.best, habit.streak);
+
+    if (!habit.completedDates.includes(today)) {
+      habit.completedDates.push(today);
+    }
+
+    await habit.save();
+    res.json(habit);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
