@@ -11,6 +11,7 @@ const habitSchema = new mongoose.Schema({
   completedToday: { type: Boolean, default: false },
   lastCompletedDate: { type: String, default: null },
   completedDates: { type: [String], default: [] },
+  undoSnapshot: { type: mongoose.Schema.Types.Mixed, default: null },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Habit", habitSchema);
