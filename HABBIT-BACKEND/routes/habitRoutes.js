@@ -106,3 +106,31 @@ router.patch("/:id/complete", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
+/* =========================
+   UNDO HABIT
+========================= */
+router.patch("/:id/undo", async (req, res) => {
+  try {
+    const habit = await Habit.findOne({ _id: req.params.id, user: req.userId });
+    if (!habit) return res.status(404).json({ message: "Habit not found" });
+
+    if (!habit.undoSnapshot) {
+      return res.status(400).json({ message: "Undo not available" });
+    }
+
+    const s = habit.undoSnapshot;
+    habit.streak = s.streak;
+    habit.total = s.total;
+    habit.best = s.best;
+    habit.lastCompletedDate = s.lastCompletedDate;
+    habit.completedToday = s.completedToday;
+    habit.completedDates = s.completedDates;
+    habit.undoSnapshot = null;
+
+    await habit.save();
+    res.json(habit);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
