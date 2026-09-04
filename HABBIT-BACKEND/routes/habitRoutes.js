@@ -134,3 +134,23 @@ router.patch("/:id/undo", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
+/* =========================
+   EDIT HABIT (name/category/time)
+========================= */
+router.patch("/:id", async (req, res) => {
+  try {
+    const { name, category, time } = req.body;
+    const habit = await Habit.findOne({ _id: req.params.id, user: req.userId });
+    if (!habit) return res.status(404).json({ message: "Habit not found" });
+
+    if (name) habit.name = name.trim();
+    if (category) habit.category = category;
+    if (time !== undefined) habit.time = time;
+
+    await habit.save();
+    res.json(habit);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
