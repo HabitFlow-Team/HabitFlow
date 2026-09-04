@@ -154,3 +154,17 @@ router.patch("/:id", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+/* =========================
+   DELETE HABIT
+========================= */
+router.delete("/:id", async (req, res) => {
+  try {
+    const habit = await Habit.findOneAndDelete({ _id: req.params.id, user: req.userId });
+    if (!habit) return res.status(404).json({ message: "Habit not found" });
+    res.json({ message: "Habit deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+module.exports = router;
