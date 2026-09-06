@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Habit = require("../models/Habit");
 
@@ -11,6 +12,33 @@ router.get("/users", async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+/* =========================
+   RESET A USER'S PASSWORD
+========================= */
+router.patch("/users/:id/reset-password", async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { password: hashedPassword },
+      { new: true }
+    ).select("-password");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ message: "Password reset successfully", user });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
