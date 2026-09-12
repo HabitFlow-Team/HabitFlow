@@ -1,8 +1,8 @@
 /**
  * ============================================================
- * HabitFlow — Shared Stats Utilities
+ * HabitFlow — Shared Habit Utilities
  * ------------------------------------------------------------
- * Centralized helper functions for calculating habit statistics.
+ * Centralized helper functions for habit counts and streaks.
  * Shared across Dashboard, Settings, Stats, and future pages.
  * ============================================================
  */
