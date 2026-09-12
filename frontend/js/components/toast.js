@@ -8,7 +8,6 @@ function showToast(msg) {
   if (!toast) return;
 
   toast.innerHTML = msg;
-
   toast.classList.add("show");
 
   setTimeout(() => {
