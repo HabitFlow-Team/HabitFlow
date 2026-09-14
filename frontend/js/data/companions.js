@@ -27,7 +27,7 @@ const COMPANIONS = [
   {
     id: "basic",
     name: "Streaksaur Prime",
-    image: "../img/avatars/streaksaur/basic.png",
+    image: "../../img/avatars/streaksaur/basic.png",
     collection: "starter",
     rarity: "Common",
     class: "Companion",
@@ -40,7 +40,7 @@ const COMPANIONS = [
   {
     id: "sleepy",
     name: "Dreamsaur",
-    image: "../img/avatars/streaksaur/sleepy.png",
+    image: "../../img/avatars/streaksaur/sleepy.png",
     collection: "starter",
     rarity: "Common",
     class: "Dreamer",
@@ -53,7 +53,7 @@ const COMPANIONS = [
   {
     id: "explorer",
     name: "Trailsaur",
-    image: "../img/avatars/streaksaur/explorer.png",
+    image: "../../img/avatars/streaksaur/explorer.png",
     collection: "starter",
     rarity: "Common",
     class: "Explorer",
@@ -66,7 +66,7 @@ const COMPANIONS = [
   {
     id: "gladiator",
     name: "Gladiatorsaur",
-    image: "../img/avatars/streaksaur/gladiator.png",
+    image: "../../img/avatars/streaksaur/gladiator.png",
     collection: "streak",
     rarity: "Rare",
     class: "Gladiator",
@@ -79,7 +79,7 @@ const COMPANIONS = [
   {
     id: "knight",
     name: "Valorsaur",
-    image: "../img/avatars/streaksaur/knight.png",
+    image: "../../img/avatars/streaksaur/knight.png",
     collection: "streak",
     rarity: "Rare",
     class: "Knight",
@@ -92,7 +92,7 @@ const COMPANIONS = [
   {
     id: "detective",
     name: "Mystisaur",
-    image: "../img/avatars/streaksaur/detective.png",
+    image: "../../img/avatars/streaksaur/detective.png",
     collection: "streak",
     rarity: "Rare",
     class: "Detective",
@@ -105,7 +105,7 @@ const COMPANIONS = [
   {
     id: "pirate",
     name: "Corsairsaur",
-    image: "../img/avatars/streaksaur/pirate.png",
+    image: "../../img/avatars/streaksaur/pirate.png",
     collection: "streak",
     rarity: "Epic",
     class: "Pirate",
@@ -118,7 +118,7 @@ const COMPANIONS = [
   {
     id: "mage",
     name: "Mysticsaur",
-    image: "../img/avatars/streaksaur/mage.png",
+    image: "../../img/avatars/streaksaur/mage.png",
     collection: "streak",
     rarity: "Epic",
     class: "Mage",
@@ -131,7 +131,7 @@ const COMPANIONS = [
   {
     id: "hero",
     name: "Supersaur",
-    image: "../img/avatars/streaksaur/hero.png",
+    image: "../../img/avatars/streaksaur/hero.png",
     collection: "streak",
     rarity: "Epic",
     class: "Hero",
@@ -144,7 +144,7 @@ const COMPANIONS = [
   {
     id: "dragon",
     name: "Drakesaur",
-    image: "../img/avatars/streaksaur/dragon.png",
+    image: "../../img/avatars/streaksaur/dragon.png",
     collection: "legendary",
     rarity: "Legendary",
     class: "Dragon",
@@ -157,7 +157,7 @@ const COMPANIONS = [
   {
     id: "fire",
     name: "Blazesaur",
-    image: "../img/avatars/streaksaur/fire.png",
+    image: "../../img/avatars/streaksaur/fire.png",
     collection: "legendary",
     rarity: "Legendary",
     class: "Flame Master",
@@ -169,7 +169,7 @@ const COMPANIONS = [
   {
     id: "king",
     name: "Kingsaur",
-    image: "../img/avatars/streaksaur/king.png",
+    image: "../../img/avatars/streaksaur/king.png",
     collection: "legendary",
     rarity: "Legendary",
     class: "King",
@@ -182,7 +182,7 @@ const COMPANIONS = [
   {
     id: "robot",
     name: "Mechasaur",
-    image: "../img/avatars/streaksaur/robot.png",
+    image: "../../img/avatars/streaksaur/robot.png",
     collection: "master",
     rarity: "Mythic",
     class: "Mech",
@@ -194,7 +194,7 @@ const COMPANIONS = [
   {
     id: "astronaut",
     name: "Cosmosaur",
-    image: "../img/avatars/streaksaur/astronaut.png",
+    image: "../../img/avatars/streaksaur/astronaut.png",
     collection: "master",
     rarity: "Mythic",
     class: "Astronaut",
@@ -207,7 +207,7 @@ const COMPANIONS = [
   {
     id: "batman",
     name: "Shadowsaur",
-    image: "../img/avatars/streaksaur/batman.png",
+    image: "../../img/avatars/streaksaur/batman.png",
     collection: "master",
     rarity: "Mythic",
     class: "Shadow Knight",
@@ -220,7 +220,7 @@ const COMPANIONS = [
   {
     id: "hacker",
     name: "Hacksaur",
-    image: "../img/avatars/streaksaur/hacker.png",
+    image: "../../img/avatars/streaksaur/hacker.png",
     collection: "master",
     rarity: "Mythic",
     class: "Cyber Agent",
@@ -233,7 +233,7 @@ const COMPANIONS = [
   {
     id: "ninja",
     name: "Stealthsaur",
-    image: "../img/avatars/streaksaur/ninja.png",
+    image: "../../img/avatars/streaksaur/ninja.png",
     collection: "master",
     rarity: "Mythic",
     class: "Ninja",
@@ -245,7 +245,7 @@ const COMPANIONS = [
   {
     id: "saiyan",
     name: "Saiyansaur",
-    image: "../img/avatars/streaksaur/saiyan.png",
+    image: "../../img/avatars/streaksaur/saiyan.png",
     collection: "master",
     rarity: "Mythic",
     class: "Ascended Warrior",
@@ -258,7 +258,7 @@ const COMPANIONS = [
   {
     id: "samurai",
     name: "Katanasaur",
-    image: "../img/avatars/streaksaur/samurai.png",
+    image: "../../img/avatars/streaksaur/samurai.png",
     collection: "master",
     rarity: "Mythic",
     class: "Samurai",
@@ -271,7 +271,7 @@ const COMPANIONS = [
   {
     id: "titan",
     name: "Titanasaur",
-    image: "../img/avatars/streaksaur/titan.png",
+    image: "../../img/avatars/streaksaur/titan.png",
     collection: "master",
     rarity: "Mythic",
     class: "Titan Slayer",
@@ -286,7 +286,7 @@ const COMPANIONS = [
   {
     id: "thunder",
     name: "Thundersaur",
-    image: "../img/avatars/streaksaur/thunder.png",
+    image: "../../img/avatars/streaksaur/thunder.png",
     collection: "master",
     rarity: "Mythic",
     class: "Thunder Warrior",

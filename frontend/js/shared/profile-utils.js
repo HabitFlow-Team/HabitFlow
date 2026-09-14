@@ -48,7 +48,7 @@ function renderCurrentAvatarName() {
 function getAvatarImagePath(avatarId) {
   const isSubPage = window.location.pathname.includes("/settings/");
 
-  const basePath = isSubPage ? "../img" : "img";
+  const basePath = isSubPage ? "../../img" : "../img";
 
   return `${basePath}/avatars/streaksaur/${avatarId}.png`;
 }

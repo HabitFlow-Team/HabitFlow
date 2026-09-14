@@ -1,6 +1,66 @@
-/* =========================
-   COMPLETE HABIT
-========================= */
+/* ============================================================
+   HABIT COMPLETION
+============================================================ */
+
+/**
+ * Applies a habit completion.
+ *
+ * Handles all habit-related state updates while storing
+ * a temporary undo snapshot in memory.
+ *
+ * @param {Object} habit
+ */
+function applyHabitCompletion(habit) {
+  const today = new Date().toDateString();
+
+  if (!habit.lastCompletedDate) {
+    habit.streak = 1;
+  } else {
+    const previous = new Date(habit.lastCompletedDate);
+    const current = new Date(today);
+    const diffDays = Math.floor(
+      (current - previous) / (1000 * 60 * 60 * 24),
+    );
+
+    if (diffDays === 1) {
+      habit.streak++;
+    } else if (diffDays > 1) {
+      habit.streak = 1;
+    }
+  }
+
+  habit.completedToday = true;
+  habit.total++;
+  habit.lastCompletedDate = today;
+  habit.best = Math.max(habit.best, habit.streak);
+
+  // completedDates history — needed for stats page charts/calendar
+  if (!habit.completedDates) habit.completedDates = [];
+
+  if (!habit.completedDates.includes(today)) {
+    habit.completedDates.push(today);
+  }
+}
+
+/**
+ * Reverts a habit completion.
+ *
+ * @param {Object} habit
+ * @param {Object} snapshot
+ */
+function revertHabitCompletion(habit, snapshot) {
+  if (!snapshot) return;
+
+  habit.streak = snapshot.streak;
+  habit.total = snapshot.total;
+  habit.best = snapshot.best;
+  habit.lastCompletedDate = snapshot.lastCompletedDate;
+  habit.completedToday = snapshot.completedToday;
+
+  habit.completedDates = snapshot.completedDates
+    ? [...snapshot.completedDates]
+    : habit.completedDates;
+}
 /* =========================
    COMPLETE HABIT
 ========================= */

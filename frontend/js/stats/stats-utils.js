@@ -1,142 +1,13 @@
 /**
  * ============================================================
- * HabitFlow — Shared Stats Utilities
+ * HabitFlow — Stats Utilities
  * ------------------------------------------------------------
- * Centralized helper functions for calculating habit statistics.
- * Shared across Dashboard, Settings, Stats, and future pages.
+ * Helper functions used specifically by the Stats page.
  * ============================================================
  */
 
 /* ============================================================
-   HABIT COUNTS
-============================================================ */
-/**
- * Returns the total number of habits.
- *
- * @param {Array} habits
- * @returns {number}
- */
-function getTotalHabits(habits = []) {
-  return habits.length;
-}
-
-/**
- * Returns the number of habits completed today.
- *
- * @param {Array} habits
- * @returns {number}
- */
-function getCompletedToday(habits = []) {
-  return habits.filter((habit) => habit.completedToday).length;
-}
-
-/**
- * Returns the lifetime total completions across all habits.
- *
- * @param {Array} habits
- * @returns {number}
- */
-function getTotalCompletions(habits = []) {
-  return habits.reduce((sum, habit) => sum + (habit.total || 0), 0);
-}
-
-/* ============================================================
-   STREAK QUERIES
-============================================================ */
-
-/**
- * Returns the highest current streak across all habits.
- *
- * @param {Array} habits
- * @returns {number}
- */
-function getCurrentStreak(habits = []) {
-  return Math.max(...habits.map((habit) => habit.streak || 0), 0);
-}
-
-/**
- * Returns the highest streak achieved across all habits.
- *
- * @param {Array} habits
- * @returns {number}
- */
-function getBestStreak(habits = []) {
-  return Math.max(...habits.map((habit) => habit.best || 0), 0);
-}
-/**
- * Returns the player's highest streak across all stored habits.
- *
- * Uses the current user's user-specific habit storage.
- *
- * @returns {number}
- */
-function getPlayerBestStreak() {
-  const habits = loadUserHabits();
-
-  return getBestStreak(habits);
-}
-/* ============================================================
-   HABIT ENGINE (Aryaan's undo/complete logic)
-============================================================ */
-
-/**
- * Applies a habit completion.
- *
- * Handles all habit-related state updates while storing
- * a temporary undo snapshot in memory.
- *
- * @param {Object} habit
- */
-function applyHabitCompletion(habit) {
-  const today = new Date().toDateString();
-
-  if (!habit.lastCompletedDate) {
-    habit.streak = 1;
-  } else {
-    const previous = new Date(habit.lastCompletedDate);
-    const current = new Date(today);
-    const diffDays = Math.floor((current - previous) / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 1) {
-      habit.streak++;
-    } else if (diffDays > 1) {
-      habit.streak = 1;
-    }
-  }
-
-  habit.completedToday = true;
-  habit.total++;
-  habit.lastCompletedDate = today;
-  habit.best = Math.max(habit.best, habit.streak);
-
-  // completedDates history — needed for stats page charts/calendar
-  if (!habit.completedDates) habit.completedDates = [];
-  if (!habit.completedDates.includes(today)) {
-    habit.completedDates.push(today);
-  }
-}
-
-/**
- * Reverts a habit completion.
- *
- * @param {Object} habit
- * @param {Object} snapshot
- */
-function revertHabitCompletion(habit, snapshot) {
-  if (!snapshot) return;
-
-  habit.streak = snapshot.streak;
-  habit.total = snapshot.total;
-  habit.best = snapshot.best;
-  habit.lastCompletedDate = snapshot.lastCompletedDate;
-  habit.completedToday = snapshot.completedToday;
-  habit.completedDates = snapshot.completedDates
-    ? [...snapshot.completedDates]
-    : habit.completedDates;
-}
-
-/* ============================================================
-   STATS PAGE — CHARTS, CALENDAR, BADGES
+   WEEKLY COMPLETION DATA
 ============================================================ */
 
 /**
@@ -160,10 +31,12 @@ function getWeeklyCompletionData(habits = []) {
     ).length;
 
     let status = "none";
+
     if (totalHabits > 0) {
       if (completedCount === totalHabits) status = "all";
       else if (completedCount > 0) status = "partial";
     }
+
     if (dateStr === today.toDateString()) status = "today";
 
     days.push({
@@ -177,6 +50,10 @@ function getWeeklyCompletionData(habits = []) {
 
   return days;
 }
+
+/* ============================================================
+   BEST DAY
+============================================================ */
 
 /**
  * Finds the day this month with the most habits completed.
@@ -195,9 +72,11 @@ function getBestDayThisMonth(habits = []) {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const d = new Date(year, month, day);
+
     if (d > now) break;
 
     const dateStr = d.toDateString();
+
     const count = habits.filter((h) =>
       (h.completedDates || []).includes(dateStr),
     ).length;
@@ -221,8 +100,13 @@ function getBestDayThisMonth(habits = []) {
   };
 }
 
+/* ============================================================
+   RANGE STATS
+============================================================ */
+
 /**
- * Completed count + completion rate for a given range (week/month/all).
+ * Completed count + completion rate for a given range
+ * (week/month/all).
  *
  * @param {Array} habits
  * @param {string} range
@@ -230,32 +114,54 @@ function getBestDayThisMonth(habits = []) {
  */
 function getRangeStats(habits = [], range = "week") {
   const now = new Date();
-  let daysBack =
-    range === "week" ? 7 : range === "month" ? now.getDate() : null;
+
+  const daysBack =
+    range === "week"
+      ? 7
+      : range === "month"
+        ? now.getDate()
+        : null;
 
   let completedCount = 0;
 
   habits.forEach((h) => {
     const dates = h.completedDates || [];
+
     if (range === "all") {
       completedCount += h.total || dates.length;
     } else {
       dates.forEach((dateStr) => {
         const d = new Date(dateStr);
-        const diffDays = Math.floor((now - d) / (1000 * 60 * 60 * 24));
-        if (diffDays >= 0 && diffDays < daysBack) completedCount++;
+        const diffDays = Math.floor(
+          (now - d) / (1000 * 60 * 60 * 24),
+        );
+
+        if (diffDays >= 0 && diffDays < daysBack) {
+          completedCount++;
+        }
       });
     }
   });
 
-  const possible = range === "all" ? null : habits.length * daysBack;
-  const rate = possible ? Math.round((completedCount / possible) * 100) : null;
+  const possible =
+    range === "all" ? null : habits.length * daysBack;
 
-  return { completedCount, rate };
+  const rate = possible
+    ? Math.round((completedCount / possible) * 100)
+    : null;
+
+  return {
+    completedCount,
+    rate,
+  };
 }
 
+/* ============================================================
+   HABIT BREAKDOWN
+============================================================ */
+
 /**
- * Per-habit completion % for the current month — for the breakdown list.
+ * Per-habit completion % for the current month.
  *
  * @param {Array} habits
  * @returns {Array}
@@ -265,17 +171,26 @@ function getHabitBreakdown(habits = []) {
   const daysElapsed = now.getDate();
 
   return habits.map((h) => {
-    const completedThisMonth = (h.completedDates || []).filter((dateStr) => {
-      const d = new Date(dateStr);
-      return (
-        d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()
-      );
-    }).length;
+    const completedThisMonth = (h.completedDates || []).filter(
+      (dateStr) => {
+        const d = new Date(dateStr);
+
+        return (
+          d.getFullYear() === now.getFullYear() &&
+          d.getMonth() === now.getMonth()
+        );
+      },
+    ).length;
 
     const pct =
       daysElapsed === 0
         ? 0
-        : Math.min(100, Math.round((completedThisMonth / daysElapsed) * 100));
+        : Math.min(
+            100,
+            Math.round(
+              (completedThisMonth / daysElapsed) * 100,
+            ),
+          );
 
     return {
       name: h.name,
@@ -286,6 +201,10 @@ function getHabitBreakdown(habits = []) {
   });
 }
 
+/* ============================================================
+   STREAK MILESTONES
+============================================================ */
+
 /**
  * Streak milestone badges — locked/unlocked based on best streak.
  *
@@ -294,6 +213,7 @@ function getHabitBreakdown(habits = []) {
  */
 function getStreakMilestones(habits = []) {
   const best = getBestStreak(habits);
+
   const milestones = [
     { days: 3, label: "3 Day Spark", icon: "🔥" },
     { days: 7, label: "7 Day Streak", icon: "⭐" },
@@ -304,8 +224,16 @@ function getStreakMilestones(habits = []) {
     { days: 180, label: "Half Year Hero", icon: "💎" },
     { days: 365, label: "One Year King", icon: "👑" },
   ];
-  return milestones.map((m) => ({ ...m, unlocked: best >= m.days }));
+
+  return milestones.map((m) => ({
+    ...m,
+    unlocked: best >= m.days,
+  }));
 }
+
+/* ============================================================
+   CATEGORY BREAKDOWN
+============================================================ */
 
 /**
  * Category-wise lifetime completion breakdown — for donut chart.
@@ -325,49 +253,77 @@ function getCategoryBreakdown(habits = []) {
   };
 
   const totals = {};
+
   habits.forEach((h) => {
     const cat = h.category || "other";
     totals[cat] = (totals[cat] || 0) + (h.total || 0);
   });
 
-  const totalAll = Object.values(totals).reduce((a, b) => a + b, 0);
+  const totalAll = Object.values(totals).reduce(
+    (a, b) => a + b,
+    0,
+  );
 
-  const breakdown = Object.entries(totals).map(([cat, count]) => ({
-    category: cat,
-    label: categoryLabels[cat] || cat,
-    count,
-    pct: totalAll === 0 ? 0 : Math.round((count / totalAll) * 100),
-  }));
+  const breakdown = Object.entries(totals).map(
+    ([cat, count]) => ({
+      category: cat,
+      label: categoryLabels[cat] || cat,
+      count,
+      pct:
+        totalAll === 0
+          ? 0
+          : Math.round((count / totalAll) * 100),
+    }),
+  );
 
   breakdown.sort((a, b) => b.count - a.count);
+
   return breakdown;
 }
 
+/* ============================================================
+   ACTIVITY HEATMAP
+============================================================ */
+
 /**
- * Last N weeks of activity data (GitHub-style grid) — columns = weeks, rows = Mon..Sun.
+ * Last N weeks of activity data (GitHub-style grid).
+ *
+ * Columns = weeks, rows = Mon..Sun.
  *
  * @param {Array} habits
  * @param {number} weeksCount
  * @returns {Array}
  */
-function getActivityHeatmapData(habits = [], weeksCount = 12) {
+function getActivityHeatmapData(
+  habits = [],
+  weeksCount = 12,
+) {
   const today = new Date();
   const totalDays = weeksCount * 7;
   const days = [];
 
   for (let i = totalDays - 1; i >= 0; i--) {
     const d = new Date();
+
     d.setDate(today.getDate() - i);
+
     const dateStr = d.toDateString();
 
     const totalHabits = habits.length;
+
     const completedCount = habits.filter((h) =>
       (h.completedDates || []).includes(dateStr),
     ).length;
 
     const pct =
-      totalHabits === 0 ? 0 : Math.round((completedCount / totalHabits) * 100);
+      totalHabits === 0
+        ? 0
+        : Math.round(
+            (completedCount / totalHabits) * 100,
+          );
+
     let heat = 0;
+
     if (pct > 0 && pct < 34) heat = 1;
     else if (pct >= 34 && pct < 67) heat = 2;
     else if (pct >= 67 && pct < 100) heat = 3;
@@ -380,19 +336,32 @@ function getActivityHeatmapData(habits = [], weeksCount = 12) {
       totalHabits,
       isToday: dateStr === today.toDateString(),
       weekday: d.getDay(),
-      label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      label: d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
     });
   }
 
   const firstWeekday = days[0].weekday;
-  const mondayIndex = firstWeekday === 0 ? 6 : firstWeekday - 1;
+
+  const mondayIndex =
+    firstWeekday === 0 ? 6 : firstWeekday - 1;
 
   const padded = [];
-  for (let i = 0; i < mondayIndex; i++) padded.push(null);
+
+  for (let i = 0; i < mondayIndex; i++) {
+    padded.push(null);
+  }
+
   padded.push(...days);
-  while (padded.length % 7 !== 0) padded.push(null);
+
+  while (padded.length % 7 !== 0) {
+    padded.push(null);
+  }
 
   const weeks = [];
+
   for (let i = 0; i < padded.length; i += 7) {
     weeks.push(padded.slice(i, i + 7));
   }
@@ -403,15 +372,6 @@ function getActivityHeatmapData(habits = [], weeksCount = 12) {
 /* ============================================================
    GLOBAL EXPORTS
 ============================================================ */
-window.getTotalHabits = getTotalHabits;
-window.getCompletedToday = getCompletedToday;
-window.getTotalCompletions = getTotalCompletions;
-window.getCurrentStreak = getCurrentStreak;
-window.getBestStreak = getBestStreak;
-window.getPlayerBestStreak = getPlayerBestStreak;
-
-window.applyHabitCompletion = applyHabitCompletion;
-window.revertHabitCompletion = revertHabitCompletion;
 
 window.getWeeklyCompletionData = getWeeklyCompletionData;
 window.getBestDayThisMonth = getBestDayThisMonth;
