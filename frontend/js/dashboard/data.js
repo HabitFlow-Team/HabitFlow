@@ -27,49 +27,12 @@ window.globalStreak = {
  * Habit persistence is now handled by backend API routes.
  * Kept as a no-op temporarily so older code doesn't break.
  */
-window.saveHabits = function () {};
+
+
+
 
 /* =========================
-   DAILY HABIT RESET
-========================= */
-function resetDailyHabits() {
-  const today = new Date().toDateString();
-
-  const lastActiveDate = loadLastActiveDate();
-  // Same day → nothing to reset
-  if (lastActiveDate === today) return;
-
-  // Check if the user missed one or more full days
-  if (lastActiveDate) {
-    const lastDate = new Date(lastActiveDate);
-    const currentDate = new Date(today);
-
-    const daysPassed = Math.floor(
-      (currentDate - lastDate) / (1000 * 60 * 60 * 24),
-    );
-
-    // Missed at least one entire day
-    if (daysPassed > 1) {
-      window.globalStreak.current = 0;
-
-      saveUserStreak(window.globalStreak);
-    }
-  }
-
-  // New day → reset completion state
-  window.habits.forEach((habit) => {
-    habit.completedToday = false;
-  });
-
-  // Save updated habits
-  saveHabits();
-
-  // Remember today's date
-  saveLastActiveDate(today);
-}
-
-/* =========================
-   LOAD HABIT 
+   LOAD HABITS — from backend now 
 ========================= */
 window.loadHabits = async function () {
   try {
@@ -85,10 +48,12 @@ window.loadHabits = async function () {
       return;
     }
 
-
-
     const today = new Date().toDateString();
 
+
+    // Normalize: Mongo's _id → .id (rest of the app already expects .id)
+    // completedToday is derived fresh from completedDates —
+    // no separate "daily reset" step needed anymore.
     window.habits = data.map((h) => ({
       ...h,
       id: h._id,
@@ -102,3 +67,9 @@ window.loadHabits = async function () {
     window.habits = [];
   }
 };
+/**
+ * No-op now — every backend route already returns the updated habit,
+ * so each caller updates window.habits directly from that response.
+ * Kept so any leftover saveHabits() calls elsewhere don't crash.
+ */
+window.saveHabits = function () {};
