@@ -64,7 +64,7 @@ function resetDailyHabits() {
 /* =========================
    LOAD HABIT 
 ========================= */
-window.loadHabits = function () {
+window.loadHabits = async function () {
   const storedHabits = loadUserHabits();
 
   // Load the user's global streak
