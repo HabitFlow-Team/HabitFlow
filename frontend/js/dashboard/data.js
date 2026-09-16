@@ -65,7 +65,21 @@ function resetDailyHabits() {
    LOAD HABIT 
 ========================= */
 window.loadHabits = async function () {
-  const storedHabits = loadUserHabits();
+  try {
+    const res = await fetch(`${API_BASE}/habits`, {
+      headers: authHeaders(),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.message || "Could not load habits", "error");
+      window.habits = [];
+      return;
+    }
+
+    window.habits = data;
+
 
   // Load the user's global streak
   window.globalStreak = loadUserStreak();
