@@ -78,7 +78,15 @@ window.loadHabits = async function () {
       return;
     }
 
-    window.habits = data;
+    
+
+const today = new Date().toDateString();
+
+window.habits = data.map((h) => ({
+  ...h,
+  id: h._id,
+  completedToday: (h.completedDates || []).includes(today),
+}));
 
 
   // Load the user's global streak
