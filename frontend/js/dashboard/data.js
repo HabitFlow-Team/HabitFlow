@@ -6,21 +6,28 @@ window.habits = [];
 
 window.editingId = null;
 window.currentFilter = "all";
+
 /**
- * Temporary undo snapshots.
- * Lives only in memory and is cleared on refresh.
+ * NOTE: No longer used for undo.
+ * Backend persists the undo snapshot.
+ * Kept temporarily so existing references don't break.
  */
 window.habitUndoState = {};
 
+/**
+ * Global daily streak — still local for now.
+ */
 window.globalStreak = {
   current: 0,
   best: 0,
   lastCompletedDate: null,
 };
 
-window.saveHabits = function () {
-  saveUserHabits(window.habits);
-};
+/**
+ * Habit persistence is now handled by backend API routes.
+ * Kept as a no-op temporarily so older code doesn't break.
+ */
+window.saveHabits = function () {};
 
 /* =========================
    DAILY HABIT RESET
@@ -78,27 +85,20 @@ window.loadHabits = async function () {
       return;
     }
 
-    
-
-const today = new Date().toDateString();
-
-window.habits = data.map((h) => ({
-  ...h,
-  id: h._id,
-  completedToday: (h.completedDates || []).includes(today),
-}));
 
 
-  // Load the user's global streak
-  window.globalStreak = loadUserStreak();
+    const today = new Date().toDateString();
 
-  if (storedHabits.length === 0) {
+    window.habits = data.map((h) => ({
+      ...h,
+      id: h._id,
+      completedToday: (h.completedDates || []).includes(today),
+    }));
+
+
+    window.globalStreak = loadUserStreak();
+  } catch (err) {
+    showToast("Could not reach server. Is the backend running?", "error");
     window.habits = [];
-    saveHabits();
-  } else {
-    window.habits = storedHabits;
   }
-
-  // Reset completed habits if a new day has started
-  resetDailyHabits();
 };
