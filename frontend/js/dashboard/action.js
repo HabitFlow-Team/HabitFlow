@@ -64,32 +64,29 @@ function revertHabitCompletion(habit, snapshot) {
 /* =========================
    COMPLETE HABIT
 ========================= */
-window.completeHabit = function (card, habit) {
-  const snapshot = {
-    streak: habit.streak,
-    total: habit.total,
-    best: habit.best,
-    lastCompletedDate: habit.lastCompletedDate,
-    completedToday: habit.completedToday,
-    completedDates: [...(habit.completedDates || [])],
-  };
+window.completeHabit = async function (card, habit) {
+  try {
+    const res = await fetch(`${API_BASE}/habits/${habit.id}/complete`, {
+      method: "PATCH",
+      headers: authHeaders(),
+    });
 
-  window.habitUndoState[habit.id] = snapshot;
+    const updated = await res.json();
 
-  // Centralized habit completion logic
-  applyHabitCompletion(habit);
+    if (!res.ok) {
+      showToast(updated.message || "Could not complete habit", "error");
+      return;
+    }
+
+    Object.assign(habit, updated, { id: updated._id, completedToday: true });
 
   // Update overall daily streak
   updateGlobalStreak();
 
-  saveHabits();
-
   setHabitCompletedUI(card);
-
   refreshChips(card, habit);
 
   const pct = updateProgress();
-
   applyFilter();
   updateFilterCounts();
 
