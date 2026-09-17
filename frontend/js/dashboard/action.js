@@ -66,46 +66,33 @@ window.completeHabit = async function (card, habit) {
 /* =========================
    UNDO HABIT
 ========================= */
-window.undoHabit = function (card, habit) {
-  /* ----------------------------------------------------------
-     Undo is only available while the temporary snapshot exists.
-     Since the snapshot is stored only in memory, refreshing the
-     app permanently removes the ability to undo.
+window.undoHabit = async function (card, habit) {
+  try {
+    const res = await fetch(`${API_BASE}/habits/${habit.id}/undo`, {
+      method: "PATCH",
+      headers: authHeaders(),
+    });
 
-     (ARYAAN)
-     ---------------------------------------------------------- */
-  const snapshot = window.habitUndoState[habit.id];
+    const updated = await res.json();
 
-  if (!snapshot) {
-    showToast("Undo is only available until you refresh the app.");
-    return;
+    if (!res.ok) {
+      showToast(updated.message || "Undo not available", "error");
+      return;
+    }
+
+    Object.assign(habit, updated, {
+      id: updated._id,
+    });
+
+    setHabitUndoUI(card);
+    refreshChips(card, habit);
+
+    updateProgress();
+    applyFilter();
+    updateFilterCounts();
+
+    showToast("Marked as not done ❌");
+  } catch (err) {
+    showToast("Could not reach server. Is the backend running?", "error");
   }
-
-  /* ----------------------------------------------------------
-     Restore the habit exactly as it was before completion.
-     Using a snapshot is safer than manually decrementing values,
-     especially as more habit properties are added in the future.
-     ---------------------------------------------------------- */
-  habit.streak = snapshot.streak;
-  habit.total = snapshot.total;
-  habit.best = snapshot.best;
-  habit.lastCompletedDate = snapshot.lastCompletedDate;
-  habit.completedToday = snapshot.completedToday;
-  habit.completedDates = [...snapshot.completedDates];
-
-  // Consume the snapshot so only one undo is possible.
-  delete window.habitUndoState[habit.id];
-  /* ---------------------------------------------------------- */
-
-  saveHabits();
-
-  setHabitUndoUI(card);
-
-  refreshChips(card, habit);
-
-  updateProgress();
-  applyFilter();
-  updateFilterCounts();
-
-  showToast("Marked as not done ❌");
 };
