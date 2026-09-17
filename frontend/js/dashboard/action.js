@@ -2,27 +2,6 @@
    HABIT COMPLETION
 ============================================================ */
 
-
-
-/**
- * Reverts a habit completion.
- *
- * @param {Object} habit
- * @param {Object} snapshot
- */
-function revertHabitCompletion(habit, snapshot) {
-  if (!snapshot) return;
-
-  habit.streak = snapshot.streak;
-  habit.total = snapshot.total;
-  habit.best = snapshot.best;
-  habit.lastCompletedDate = snapshot.lastCompletedDate;
-  habit.completedToday = snapshot.completedToday;
-
-  habit.completedDates = snapshot.completedDates
-    ? [...snapshot.completedDates]
-    : habit.completedDates;
-}
 /* =========================
    COMPLETE HABIT
 ========================= */
