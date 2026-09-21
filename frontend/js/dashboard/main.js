@@ -7,7 +7,7 @@
 //     - Toast popup
 // ============================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   /* =========================
       SELECTORS
   ========================= */
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
    INITIAL APP LOAD
 ========================= */
 
-  loadHabits();
+ await loadHabits();
 
   initFilters();
   renderDashboardProfile();
