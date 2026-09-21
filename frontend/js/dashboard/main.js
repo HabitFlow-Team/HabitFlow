@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
    INITIAL APP LOAD
 ========================= */
 
- await loadHabits();
+  await loadHabits();
 
   initFilters();
   renderDashboardProfile();
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* =========================
      ADD HABIT
   ========================= */
-  window.createHabit = function (name, category, time) {
+  window.createHabit = async function (name, category, time) {
     name = name.trim();
     name = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -79,145 +79,148 @@ document.addEventListener("DOMContentLoaded", async () => {
       showToast("Habit already exists ⚠️");
       return false;
     }
+    try {
+      const res = await fetch(`${API_BASE}/habits`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ name, category, time }),
+      });
 
-    const habit = {
-      id: Date.now(),
-      name,
-      category: category || "other",
-      time: time || "",
-      streak: 0,
-      best: 0,
-      total: 0,
-      completedToday: false,
-      lastCompletedDate: null,
-    };
+      const data = await res.json();
 
-    window.habits.push(habit);
+      if (!res.ok) {
+        showToast(data.message || "Could not add habit", "error");
+        return false;
+      }
 
-    renderHabitCard(habit);
-
-    saveHabits();
-
-    updateProgress();
-    applyFilter();
-    updateFilterCounts();
-
-    showToast("Habit added ✨");
-
-    return true;
-  };
-
-  /* =========================
-     EVENTS
-  ========================= */
-  function deleteHabit(card, id) {
-    window.habits = window.habits.filter((h) => h.id != id);
-
-    saveHabits();
-
-    card.classList.add("deleting");
-
-    setTimeout(() => {
-      card.remove();
+      const habit = { ...data, id: data._id, completedToday: false };
+      window.habits.push(habit);
+      renderHabitCard(habit);
 
       updateProgress();
       applyFilter();
       updateFilterCounts();
-    }, 250);
 
-    showToast(`
+      showToast("Habit added ✨");
+
+      return true;
+    }   catch (err) {
+      showToast("Could not reach server. Is the backend running?", "error");
+      return false;
+    }
+  };
+
+    /* =========================
+       EVENTS
+    ========================= */
+    function deleteHabit(card, id) {
+      window.habits = window.habits.filter((h) => h.id != id);
+
+      saveHabits();
+
+      card.classList.add("deleting");
+
+      setTimeout(() => {
+        card.remove();
+
+        updateProgress();
+        applyFilter();
+        updateFilterCounts();
+      }, 250);
+
+      showToast(`
     <span class="material-symbols-rounded toast-icon">
       delete_sweep
     </span>
     Habit deleted
   `);
-  }
-
-  habitContainer.addEventListener("click", (e) => {
-    const card = e.target.closest(".habit-card");
-    if (!card) return;
-
-    const id = card.getAttribute("data-id");
-    const habit = window.habits.find((h) => h.id == id);
-    if (!habit) return;
-
-    // ===== MOBILE EDIT =====
-    if (e.target.closest(".btn-edit-trigger")) {
-      openEditModal(habit, id);
-
-      card.querySelector(".habit-dropdown")?.classList.remove("open");
-
-      return;
     }
 
-    // ===== MOBILE DELETE =====
-    if (e.target.closest(".btn-delete-trigger")) {
-      deleteHabit(card, id);
+    habitContainer.addEventListener("click", (e) => {
+      const card = e.target.closest(".habit-card");
+      if (!card) return;
 
-      card.querySelector(".habit-dropdown")?.classList.remove("open");
+      const id = card.getAttribute("data-id");
+      const habit = window.habits.find((h) => h.id == id);
+      if (!habit) return;
 
-      return;
-    }
+      // ===== MOBILE EDIT =====
+      if (e.target.closest(".btn-edit-trigger")) {
+        openEditModal(habit, id);
 
-    // ===== MOBILE MORE MENU =====
-    if (e.target.closest(".btn-more")) {
-      e.stopPropagation();
+        card.querySelector(".habit-dropdown")?.classList.remove("open");
 
-      const dropdown = card.querySelector(".habit-dropdown");
-
-      document.querySelectorAll(".habit-dropdown.open").forEach((d) => {
-        if (d !== dropdown) {
-          d.classList.remove("open");
-        }
-      });
-
-      dropdown.classList.toggle("open");
-      return;
-    }
-
-    // ===== EDIT =====
-    if (e.target.closest(".btn-edit")) {
-      openEditModal(habit, id);
-      return;
-    }
-
-    // ===== COMPLETE =====
-    if (e.target.closest(".btn-complete")) {
-      if (!habit.completedToday) {
-        completeHabit(card, habit);
-      } else {
-        undoHabit(card, habit);
+        return;
       }
 
-      return;
-    }
+      // ===== MOBILE DELETE =====
+      if (e.target.closest(".btn-delete-trigger")) {
+        deleteHabit(card, id);
 
-    if (e.target.closest(".btn-delete")) {
-      deleteHabit(card, id);
-      return;
-    }
+        card.querySelector(".habit-dropdown")?.classList.remove("open");
+
+        return;
+      }
+
+      // ===== MOBILE MORE MENU =====
+      if (e.target.closest(".btn-more")) {
+        e.stopPropagation();
+
+        const dropdown = card.querySelector(".habit-dropdown");
+
+        document.querySelectorAll(".habit-dropdown.open").forEach((d) => {
+          if (d !== dropdown) {
+            d.classList.remove("open");
+          }
+        });
+
+        dropdown.classList.toggle("open");
+        return;
+      }
+
+      // ===== EDIT =====
+      if (e.target.closest(".btn-edit")) {
+        openEditModal(habit, id);
+        return;
+      }
+
+      // ===== COMPLETE =====
+      if (e.target.closest(".btn-complete")) {
+        if (!habit.completedToday) {
+          completeHabit(card, habit);
+        } else {
+          undoHabit(card, habit);
+        }
+
+        return;
+      }
+
+      if (e.target.closest(".btn-delete")) {
+        deleteHabit(card, id);
+        return;
+      }
+    });
+
+    /* =========================
+       HOVER → UNDO TEXT
+    ========================= */
+    habitContainer.addEventListener("mouseover", (e) => {
+      const btn = e.target.closest(".btn-complete");
+      if (!btn) return;
+
+      const card = btn.closest(".habit-card");
+      if (card.classList.contains("is-completed")) {
+        btn.innerText = "Undo ? ↩️";
+      }
+    });
+
+    habitContainer.addEventListener("mouseout", (e) => {
+      const btn = e.target.closest(".btn-complete");
+      if (!btn) return;
+
+      const card = btn.closest(".habit-card");
+      if (card.classList.contains("is-completed")) {
+        btn.innerText = "Completed! 🔥";
+      }
+    });
   });
-
-  /* =========================
-     HOVER → UNDO TEXT
-  ========================= */
-  habitContainer.addEventListener("mouseover", (e) => {
-    const btn = e.target.closest(".btn-complete");
-    if (!btn) return;
-
-    const card = btn.closest(".habit-card");
-    if (card.classList.contains("is-completed")) {
-      btn.innerText = "Undo ? ↩️";
-    }
-  });
-
-  habitContainer.addEventListener("mouseout", (e) => {
-    const btn = e.target.closest(".btn-complete");
-    if (!btn) return;
-
-    const card = btn.closest(".habit-card");
-    if (card.classList.contains("is-completed")) {
-      btn.innerText = "Completed! 🔥";
-    }
-  });
-});
