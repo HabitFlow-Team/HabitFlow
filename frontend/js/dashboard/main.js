@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 }
 
-    habitContainer.addEventListener("click", (e) => {
+    habitContainer.addEventListener("click", async (e) => {
       const card = e.target.closest(".habit-card");
       if (!card) return;
 
@@ -166,18 +166,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       // ===== MOBILE EDIT =====
       if (e.target.closest(".btn-edit-trigger")) {
         openEditModal(habit, id);
-
         card.querySelector(".habit-dropdown")?.classList.remove("open");
-
         return;
       }
 
       // ===== MOBILE DELETE =====
       if (e.target.closest(".btn-delete-trigger")) {
-        deleteHabit(card, id);
-
+        await deleteHabit(card, id);
         card.querySelector(".habit-dropdown")?.classList.remove("open");
-
         return;
       }
 
@@ -206,16 +202,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       // ===== COMPLETE =====
       if (e.target.closest(".btn-complete")) {
         if (!habit.completedToday) {
-          completeHabit(card, habit);
+          await completeHabit(card, habit);
         } else {
-          undoHabit(card, habit);
+          await undoHabit(card, habit);
         }
-
         return;
       }
 
       if (e.target.closest(".btn-delete")) {
-        deleteHabit(card, id);
+        await deleteHabit(card, id);
         return;
       }
     });
