@@ -111,18 +111,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
     /* =========================
-       EVENTS
+      DELETE HABIT
     ========================= */
-    function deleteHabit(card, id) {
-      window.habits = window.habits.filter((h) => h.id != id);
+    async function deleteHabit(card, id) {
+       try {
+    const res = await fetch(`${API_BASE}/habits/${id}`, {
+      method: "DELETE",
+      headers: authHeaders(),
+    });
 
-      saveHabits();
+    if (!res.ok) {
+      const data = await res.json();
+
+      showToast(
+        data.message || "Could not delete habit",
+        "error"
+      );
+
+      return;
+    }
+      window.habits = window.habits.filter((h) => h.id != id);
 
       card.classList.add("deleting");
 
       setTimeout(() => {
         card.remove();
-
         updateProgress();
         applyFilter();
         updateFilterCounts();
@@ -134,7 +147,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     </span>
     Habit deleted
   `);
-    }
+  }  catch (err) {
+    showToast(
+      "Could not reach server. Is the backend running?",
+      "error"
+    );
+  }
+}
 
     habitContainer.addEventListener("click", (e) => {
       const card = e.target.closest(".habit-card");
