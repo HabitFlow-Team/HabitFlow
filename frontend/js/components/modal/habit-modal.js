@@ -131,13 +131,13 @@ habitSave.addEventListener("click", async () => {
   ========================= */
 
   if (window.habitModalMode === "create") {
-     setSaveLoading(true);
-    const created = window.createHabit(
+    setSaveLoading(true);
+    const created = await window.createHabit(
       habitName.value,
       habitCategory.value,
       habitTime.value,
     );
-     setSaveLoading(false);
+    setSaveLoading(false);
 
     if (!created) {
       return;
@@ -162,8 +162,8 @@ habitSave.addEventListener("click", async () => {
     showToast("Habit name cannot be empty");
     return;
   }
-   setSaveLoading(true);
-  try{
+  setSaveLoading(true);
+  try {
     const res = await fetch(`${API_BASE}/habits/${habit.id}`, {
       method: "PATCH",
       headers: authHeaders(),
@@ -192,24 +192,25 @@ habitSave.addEventListener("click", async () => {
 
       let chips = card.querySelector(".habit-chips");
       let timeChip = card.querySelector(".chip-time");
-  }
-  
+    
 
-  if (habit.time) {
-    if (!timeChip) {
-      timeChip = document.createElement("span");
-      timeChip.className = "chip chip-time";
-      chips.appendChild(timeChip);
+
+    if (habit.time) {
+      if (!timeChip) {
+        timeChip = document.createElement("span");
+        timeChip.className = "chip chip-time";
+        chips.appendChild(timeChip);
+      }
+
+      timeChip.textContent = `⏰ ${habit.time}`;
+    } else {
+      timeChip?.remove();
     }
-
-    timeChip.textContent = `⏰ ${habit.time}`;
-  } else {
-    timeChip?.remove();
   }
 
-  showToast("Habit updated ✨");
-  closeHabitModal();
-   } catch (err) {
+    showToast("Habit updated ✨");
+    closeHabitModal();
+  } catch (err) {
     showToast("Could not reach server. Is the backend running?", "error");
   } finally {
     setSaveLoading(false);
