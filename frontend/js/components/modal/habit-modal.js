@@ -138,7 +138,7 @@ habitSave.addEventListener("click", async () => {
       habitTime.value,
     );
      setSaveLoading(false);
-     
+
     if (!created) {
       return;
     }
@@ -156,37 +156,44 @@ habitSave.addEventListener("click", async () => {
 
   if (!habit) return;
 
-  setSaveLoading(true);
-
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
   const updatedName = habitName.value.trim();
 
   if (!updatedName) {
     showToast("Habit name cannot be empty");
-    setSaveLoading(false);
     return;
   }
+   setSaveLoading(true);
+  try{
+    const res = await fetch(`${API_BASE}/habits/${habit.id}`, {
+      method: "PATCH",
+      headers: authHeaders(),
+      body: JSON.stringify({
+        name: updatedName,
+        category: habitCategory.value,
+        time: habitTime.value,
+      }),
+    });
+    const data = await res.json();
 
-  habit.name = updatedName;
-  habit.category = habitCategory.value;
-  habit.time = habitTime.value;
+    if (!res.ok) {
+      showToast(data.message || "Could not update habit", "error");
+      return;
+    }
 
-  const card = document.querySelector(`[data-id="${window.editingId}"]`);
+    Object.assign(habit, data, { id: data._id });
 
-  if (!card) {
-    setSaveLoading(false);
-    return;
+    const card = document.querySelector(`[data-id="${window.editingId}"]`);
+
+    if (card) {
+      const cat = window.CATEGORIES[habit.category];
+      card.querySelector(".habit-name").textContent = habit.name;
+      card.querySelector(".habit-dot").textContent = cat.icon;
+      card.style.setProperty("--cat-color", cat.color);
+
+      let chips = card.querySelector(".habit-chips");
+      let timeChip = card.querySelector(".chip-time");
   }
-
-  const cat = window.CATEGORIES[habit.category];
-
-  card.querySelector(".habit-name").textContent = habit.name;
-  card.querySelector(".habit-dot").textContent = cat.icon;
-  card.style.setProperty("--cat-color", cat.color);
-
-  let chips = card.querySelector(".habit-chips");
-  let timeChip = card.querySelector(".chip-time");
+  
 
   if (habit.time) {
     if (!timeChip) {
@@ -200,11 +207,13 @@ habitSave.addEventListener("click", async () => {
     timeChip?.remove();
   }
 
-  saveHabits();
-
   showToast("Habit updated ✨");
-
   closeHabitModal();
+   } catch (err) {
+    showToast("Could not reach server. Is the backend running?", "error");
+  } finally {
+    setSaveLoading(false);
+  }
 });
 
 /* =========================
