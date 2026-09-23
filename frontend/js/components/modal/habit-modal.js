@@ -131,12 +131,14 @@ habitSave.addEventListener("click", async () => {
   ========================= */
 
   if (window.habitModalMode === "create") {
+     setSaveLoading(true);
     const created = window.createHabit(
       habitName.value,
       habitCategory.value,
       habitTime.value,
     );
-
+     setSaveLoading(false);
+     
     if (!created) {
       return;
     }
